@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "dgSpecHash": "Ge+lR3aGN0MhxhZmqyfamhGg8osI6PLDBMGv7tvWatB3HFGmGiv0filOVqv01LcrbZ/GiMjit3QsPC5vNkV0sw==",
+  "success": true,
+  "projectFilePath": "D:\\MKEv2.0\\WinFormsApp1\\MKE.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\gusev\\.nuget\\packages\\dotnumerics\\1.1.0\\dotnumerics.1.1.0.nupkg.sha512",
+    "C:\\Users\\gusev\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Пакет \"DotNumerics 1.1.0\" был восстановлен с помощью \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1\", а не целевой платформы проекта \"net6.0-windows7.0\". Этот пакет может быть не полностью совместим с вашим проектом.",
+      "libraryId": "DotNumerics",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
+}

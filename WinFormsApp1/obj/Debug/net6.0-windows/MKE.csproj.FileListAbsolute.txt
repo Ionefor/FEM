@@ -1,0 +1,60 @@
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.exe
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.deps.json
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.runtimeconfig.json
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.dll
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.pdb
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.AssemblyReference.cache
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\WinFormsApp1.Form1.resources
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.GenerateResource.cache
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.GeneratedMSBuildEditorConfig.editorconfig
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfoInputs.cache
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfo.cs
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CoreCompileInputs.cache
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.dll
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\refint\MKE.dll
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.pdb
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.genruntimeconfig.cache
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\ref\MKE.dll
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MathNet.Numerics.dll
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CopyComplete
+G:\Учеба\Диплом\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\DotNumerics.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MKE.exe
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MKE.deps.json
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MKE.runtimeconfig.json
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MKE.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MKE.pdb
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\DotNumerics.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\bin\Debug\net6.0-windows\MathNet.Numerics.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.AssemblyReference.cache
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\WinFormsApp1.Form1.resources
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.GenerateResource.cache
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.GeneratedMSBuildEditorConfig.editorconfig
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfoInputs.cache
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfo.cs
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CoreCompileInputs.cache
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CopyComplete
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\refint\MKE.dll
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.pdb
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\MKE.genruntimeconfig.cache
+G:\Учеба\Диплом\MKEv2.0 — копия\WinFormsApp1\obj\Debug\net6.0-windows\ref\MKE.dll
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.exe
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.deps.json
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.runtimeconfig.json
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.dll
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MKE.pdb
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\DotNumerics.dll
+D:\MKEv2.0\WinFormsApp1\bin\Debug\net6.0-windows\MathNet.Numerics.dll
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.AssemblyReference.cache
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\WinFormsApp1.Form1.resources
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.GenerateResource.cache
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.GeneratedMSBuildEditorConfig.editorconfig
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfoInputs.cache
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.AssemblyInfo.cs
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CoreCompileInputs.cache
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.csproj.CopyComplete
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.dll
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\refint\MKE.dll
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.pdb
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\MKE.genruntimeconfig.cache
+D:\MKEv2.0\WinFormsApp1\obj\Debug\net6.0-windows\ref\MKE.dll
