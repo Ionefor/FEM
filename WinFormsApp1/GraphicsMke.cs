@@ -12,12 +12,12 @@
         /// <summary>
         ///Длина панели
         /// </summary>
-        public int panelHeight;
-        private Graphics graphics;
+        public int panelHeight;       
         /// <summary>
         ///Набор треугольников, образующих триангуляцию области 
         /// </summary>
         private List<Triangle> triangles { get; set; }
+        private Graphics graphics;
         public GraphicsMke(Panel XOY, List<Triangle> triangulation)
         {
             panelHeight = XOY.Height;

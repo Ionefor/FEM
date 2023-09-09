@@ -56,22 +56,18 @@
         /// Начальный массив точек области
         /// </summary>
         private PointF[] points { get; set; }
-
         /// <summary>
         /// Список структур треугольников триангуляции Делоне
         /// </summary>
         public List<Triangle> triangulation = new List<Triangle>();
-
         /// <summary>
         /// Список точек после разбиения изначальных сторон области пополам
         /// </summary>
         private List<PointF> splitPoints;
-
         /// <summary>
         /// Треугольники, не подходящие под условия триангуляции
         /// </summary>
         private List<Triangle> badTriangle = new List<Triangle>();
-
         /// <summary>
         /// Узлы сетки
         /// </summary>

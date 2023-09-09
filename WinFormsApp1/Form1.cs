@@ -1,8 +1,4 @@
 using MKE;
-using System.Data;
-using System.DirectoryServices.ActiveDirectory;
-using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WinFormsApp1
 {
@@ -11,58 +7,58 @@ namespace WinFormsApp1
         /// <summary>
         ///Точки, по котором задается область
         /// </summary>
-        PointF[] points;
+        private PointF[] points;
         /// <summary>
         /// Коэффициенты теплообмена для каждой границы
         /// </summary>
-        double[] h;
+        private double[] h;
         /// <summary>
         /// Поток тепла для каждой границы
         /// </summary>
-        double[] q;
+        private double[] q;
         /// <summary>
         ///Температура окружающей среды с каждой границы
         /// </summary>
-        double[] t_inf;      
+        private double[] t_inf;
         /// <summary>
         /// Счетчик шагов введения параметров 
         /// </summary>
-        int count = 0;
+        private int countStepEnterData = 0;
         /// <summary>
         ///Коэффициент теплопроводности в направлении оси х
         /// </summary>
-        int Kx;
+        private int Kx;
         /// <summary>
         /// Коэффициент теплопроводности в направлении оси у
         /// </summary>
-        int Ky;
+        private int Ky;
         /// <summary>
         ///Источник тепла внутри тела(области)
         /// </summary>
-        int Q;
-        bool flagDef = false;
+        private int Q;
+        private bool flagDef = false;
 
-        GraphicsMke grapMke;
-        Solution_Equation solutionEq;
-        Area area;
-        Triangulation triangulation;
+        private GraphicsMke grapMke;
+        private Solution_Equation solutionEq;
+        private Area area;
+        private Triangulation triangulation;
 
-        TextBox NumVertex = new TextBox();
-        Label NumVertexText = new Label();
-        Label CoordinatesVertexText = new Label();
+        private TextBox NumVertex = new TextBox();
+        private Label NumVertexText = new Label();
+        private Label CoordinatesVertexText = new Label();
 
-        Label XText = new();
-        Label YText = new Label();       
-        TextBox X = new TextBox();
-        TextBox Y = new TextBox();
+        private Label XText = new();
+        private Label YText = new Label();
+        private TextBox X = new TextBox();
+        private TextBox Y = new TextBox();
 
-        Label qDis = new Label();
-        Label TDis = new Label();
-        Label hDis = new Label();
-        Label QDis = new Label();
-        Label KText = new Label();
+        private Label qDis = new Label();
+        private Label TDis = new Label();
+        private Label hDis = new Label();
+        private Label QDis = new Label();
+        private Label KText = new Label();
 
-        Button Enterdata = new Button();
+        private Button Enterdata = new Button();
 
         public Form1()
         {
@@ -72,11 +68,145 @@ namespace WinFormsApp1
         {
             InterfaceFirstStep();
         }
+        /// <summary>
+        /// Метод с тестовыми данными
+        /// </summary>
+        private void TestData()
+        {
+            KText.Visible = false;
+            QDis.Visible = false;
+            hDis.Visible = false;
+            qDis.Visible = false;
+            TDis.Visible = false;
+            NumVertex.Text = 13.ToString();//
 
+            points = new PointF[int.Parse(NumVertex.Text.ToString())];
+            h = new double[int.Parse(NumVertex.Text.ToString())];
+            q = new double[int.Parse(NumVertex.Text.ToString())];
+            t_inf = new double[int.Parse(NumVertex.Text.ToString())];
+
+            Kx = 3;
+            Ky = 3;
+            Q = 20;
+
+            Kxx.Text = Kx.ToString();
+            Kyy.Text = Ky.ToString();
+            Qv.Text = Q.ToString();
+
+            h[0] = 150;
+            t_inf[0] = 320;
+            q[0] = 0;
+
+            h[1] = 150;
+            t_inf[1] = 350;
+            q[1] = 0;
+
+            h[2] = 150;
+            t_inf[2] = 330;
+            q[2] = 0;
+
+            h[3] = 150;
+            t_inf[3] = 300;
+            q[3] = 0;
+
+            h[4] = 150;
+            t_inf[4] = 300;
+            q[4] = 0;
+
+            h[5] = 150;
+            t_inf[5] = 300;
+            q[5] = 0;
+
+            h[6] = 150;
+            t_inf[6] = 300;
+            q[6] = 0;
+
+            h[7] = 150;
+            t_inf[7] = 300;
+            q[7] = 0;
+
+            h[8] = 150;
+            t_inf[8] = 301;
+            q[8] = 0;
+
+            h[9] = 150;
+            t_inf[9] = 300;
+            q[9] = 0;
+
+            h[10] = 150;
+            t_inf[10] = 300;
+            q[10] = 0;
+
+            h[11] = 150;
+            t_inf[11] = 300;
+            q[11] = 0;
+
+            h[12] = 150;
+            t_inf[12] = 300;
+            q[12] = 0;
+
+            //
+            points[0].X = 1;
+            points[0].Y = 6;
+
+            points[1].X = 2.5f;
+            points[1].Y = 2;
+
+            points[2].X = 4;
+            points[2].Y = 3.5f;
+
+            points[3].X = 6.5f;
+            points[3].Y = 3.5f;
+
+            points[4].X = 7.5f;
+            points[4].Y = 0.5f;
+
+            points[5].X = 9.5f;
+            points[5].Y = 2;
+
+            points[6].X = 9;
+            points[6].Y = 4.5f;
+
+            points[7].X = 13;
+            points[7].Y = 4;
+
+            points[8].X = 12.5f;
+            points[8].Y = 7.5f;
+
+            points[9].X = 9.5f;
+            points[9].Y = 7.5f;
+
+            points[10].X = 6;
+            points[10].Y = 7;
+
+            points[11].X = 5;
+            points[11].Y = 8.5f;
+
+            points[12].X = 4;
+            points[12].Y = 6;
+
+
+            area = new Area(points);
+            area.ShiftingPointsArea();
+
+            triangulation = new Triangulation(area.points);
+            triangulation.InitialPartitioning();
+            triangulation.Delaunaytriangulation();
+            triangulation.DeterminingNodeNumbers();
+
+            grapMke = new GraphicsMke(XOY, triangulation.triangulation);
+            grapMke.DisplayAllTriangles();
+
+            InterfaceFinalView();
+
+            hval.Text = h[0].ToString();
+            Tval.Text = t_inf[0].ToString();
+            qval.Text = q[0].ToString();
+        }
         /// <summary>
         /// Вид интерфейса на первом шаге работы программы
         /// </summary>
-        public void InterfaceFirstStep()
+        private void InterfaceFirstStep()
         {
             TempNode.Visible = false;
             TempNodeText.Visible = false;
@@ -223,7 +353,7 @@ namespace WinFormsApp1
         /// <summary>
         /// Вид интерфейса на последующих шагах работы программы
         /// </summary>
-        public void InterfaceOtherStep()
+        private void InterfaceOtherStep()
         {
             Kxx.Visible = false;
             Kyy.Visible = false;
@@ -270,7 +400,7 @@ namespace WinFormsApp1
         /// <summary>
         /// Финальный вид интерфейса программы
         /// </summary>
-        public void InterfaceFinalView()
+        private void InterfaceFinalView()
         {
             NumVertexText.Visible = false;
             NumVertex.Visible = false;
@@ -316,6 +446,7 @@ namespace WinFormsApp1
 
             GetSolution.Visible = true;
             Save.Visible = true;
+            Save.Enabled = false;
 
             DataText.Text = "Введенные параметры:";
             DataText.Location = new Point(93, 9);
@@ -362,7 +493,7 @@ namespace WinFormsApp1
         /// </summary>
         /// <param name="pointOnPanel"></param>
         /// <returns></returns>
-        public int PointOnLine(PointF pointOnPanel)
+        private int PointOnLine(PointF pointOnPanel)
         {
             int numberBorder = 0;
             double distance;
@@ -414,7 +545,7 @@ namespace WinFormsApp1
         /// </summary>
         /// <param name="pointOnPanel"></param>
         /// <returns></returns>
-        public int PointCloseNode(PointF pointOnPanel)
+        private int PointCloseNode(PointF pointOnPanel)
         {
             double minDistance = 1000;
             int indexNode = 0;
@@ -444,7 +575,7 @@ namespace WinFormsApp1
         /// Отрисовывает границу по ее номеру
         /// </summary>
         /// <param name="numBorder"></param>
-        public void ShowBorder(int numBorder)
+        private void ShowBorder(int numBorder)
         {
             for (int i = 0; i < points.Length; i++)
             {
@@ -478,15 +609,14 @@ namespace WinFormsApp1
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void Enterdata_Click(object? sender, EventArgs e)
+        private void Enterdata_Click(object? sender, EventArgs e)
         {
+           TestData();
+            return;
             try
             {
-                if (count == 0)
+                if (countStepEnterData == 0)
                 {
-                    InterfaceOtherStep();
-                    NumVertex.Text = 13.ToString();//
-
                     points = new PointF[int.Parse(NumVertex.Text.ToString())];
                     h = new double[int.Parse(NumVertex.Text.ToString())];
                     q = new double[int.Parse(NumVertex.Text.ToString())];
@@ -495,135 +625,38 @@ namespace WinFormsApp1
                     Kx = int.Parse(Kxx.Text);
                     Ky = int.Parse(Kyy.Text);
                     Q = int.Parse(Qv.Text);
-                    
+                    InterfaceOtherStep();
                 }
-                points[count].X = float.Parse(X.Text);
-                points[count].Y = float.Parse(Y.Text);
+                points[countStepEnterData].X = float.Parse(X.Text);
+                points[countStepEnterData].Y = float.Parse(Y.Text);
 
-                h[count] = double.Parse(hval.Text);
-                q[count] = double.Parse(qval.Text);
-                t_inf[count] = double.Parse(Tval.Text);
+                h[countStepEnterData] = double.Parse(hval.Text);
+                q[countStepEnterData] = double.Parse(qval.Text);
+                t_inf[countStepEnterData] = double.Parse(Tval.Text);
             }
             catch
             {
-                /* MessageBox.Show("Проверьте введенные данные. \nЗначения параметров должны являться вещественными числами");
+                MessageBox.Show("Проверьте введенные данные. \nЗначения параметров должны являться вещественными числами");
 
-                if (Count == 0)
+                if (countStepEnterData == 0)
                 {
                     X.Text = null;
                     Y.Text = null;
-                    Q.Text = null;
+                    Qv.Text = null;
                     NumVertex.Text = null;
                 }
                 else
                 {
                     X.Text = null;
                     Y.Text = null;
-
                     hval.Text = null;
                     Tval.Text = null;
                     qval.Text = null;
                 }
-                count--;
-                */
-
-
-                count = int.Parse(NumVertex.Text);
-                Qv.Text = "20";
-                h[0] = 150;
-                t_inf[0] = 320;
-                q[0] = 0;
-
-                h[1] = 150;
-                t_inf[1] = 350;
-                q[1] = 0;
-
-                h[2] = 150;
-                t_inf[2] = 330;
-                q[2] = 0;
-
-                h[3] = 150;
-                t_inf[3] = 300;
-                q[3] = 0;
-
-                h[4] = 150;
-                t_inf[4] = 300;
-                q[4] = 0;
-
-                h[5] = 150;
-                t_inf[5] = 300;
-                q[5] = 0;
-
-                h[6] = 150;
-                t_inf[6] = 300;
-                q[6] = 0;
-
-                h[7] = 150;
-                t_inf[7] = 300;
-                q[7] = 0;
-
-                h[8] = 150;
-                t_inf[8] = 301;
-                q[8] = 0;
-
-                h[9] = 150;
-                t_inf[9] = 300;
-                q[9] = 0;
-
-                h[10] = 150;
-                t_inf[10] = 300;
-                q[10] = 0;
-
-                h[11] = 150;
-                t_inf[11] = 300;
-                q[11] = 0;
-
-                h[12] = 150;
-                t_inf[12] = 300;
-                q[12] = 0;
-
-                //
-                points[0].X = 1;
-                points[0].Y = 6;
-
-                points[1].X = 2.5f;
-                points[1].Y = 2;
-
-                points[2].X = 4;
-                points[2].Y = 3.5f;
-
-                points[3].X = 6.5f;
-                points[3].Y = 3.5f;
-
-                points[4].X = 7.5f;
-                points[4].Y = 0.5f;
-
-                points[5].X = 9.5f;
-                points[5].Y = 2;
-
-                points[6].X = 9;
-                points[6].Y = 4.5f;
-
-                points[7].X = 13;
-                points[7].Y = 4;
-
-                points[8].X = 12.5f;
-                points[8].Y = 7.5f;
-
-                points[9].X = 9.5f;
-                points[9].Y = 7.5f;
-
-                points[10].X = 6;
-                points[10].Y = 7;
-
-                points[11].X = 5;
-                points[11].Y = 8.5f;
-
-                points[12].X = 4;
-                points[12].Y = 6;
+                countStepEnterData--;            
             }
 
-            if (count > 0 && count == int.Parse(NumVertex.Text))
+            if (countStepEnterData > 0 && countStepEnterData == int.Parse(NumVertex.Text) - 1)
             {
                 area = new Area(points);
                 area.ShiftingPointsArea();
@@ -638,16 +671,26 @@ namespace WinFormsApp1
                 grapMke.DisplayAllTriangles();
 
                 InterfaceFinalView();
+
+                hval.Text = h[0].ToString();
+                Tval.Text = t_inf[0].ToString();
+                qval.Text = q[0].ToString();
+            }
+            else
+            {
+                X.Text = null;
+                Y.Text = null;
+                hval.Text = null;
+                Tval.Text = null;
+                qval.Text = null;
             }
 
-            if (count > 0 && count == int.Parse(NumVertex.Text) - 2)
+            if (countStepEnterData > 0 && countStepEnterData == int.Parse(NumVertex.Text) - 2)
             {
                 Enterdata.Text = "Построить сетку";
             }
-
-            X.Text = null;
-            Y.Text = null;
-            count++;
+           
+            countStepEnterData++;
         }
         /// <summary>
         /// Вывод параметры уравнения и показывает выбранную границу
@@ -742,6 +785,7 @@ namespace WinFormsApp1
             EnableNodes.Enabled = true;
             NumNodes.Enabled = true;
             Change.Enabled = false;
+            Save.Enabled = true;
         }
         /// <summary>
         ///Обработка клика по панели. Отображание границы области или узла сетки, если они находятся достаточно близко к клику
@@ -750,7 +794,7 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void XOY_MouseClick(object sender, MouseEventArgs e)
         {
-            if (count != 0)
+            if (countStepEnterData != 0)
             {
                 PointF pointOnPanel = new();
                 int numBorder;
@@ -880,24 +924,22 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void Save_Click(object sender, EventArgs e)
         {
-            string path = @"G:\Учеба\Диплом\MKEv2.0\Temp1.txt";
+            SaveFileDialog result = new SaveFileDialog();
+            result.Filter = "Текстовые файлы(*.txt) | *.txt | All files(*.*) | *.* ";
 
-            using (StreamWriter stream = new StreamWriter(path, false))
+            if (result.ShowDialog() == DialogResult.OK)
             {
-                stream.Write("Номер узла      Температура в узле");
-                stream.Write("\n");
-                for (int i = 0; i < triangulation.nodes.Count; i++)
-                {
-                    for (int j = 0; j < 1; j++)
-                    {
-                        stream.Write("_____________|____________________|");
-                        stream.Write("\n");
-                        stream.Write((i + 1).ToString() + "      ");
-                        stream.Write("             " + Math.Round((solutionEq.result[i] - 273), 2));
+                string path = result.FileName;
+                using (StreamWriter stream = new StreamWriter(path, false))
+                {                  
+                    stream.WriteLine("Номер узла      Температура в узле (°C)");
+                    for (int i = 0; i < triangulation.nodes.Count; i++)
+                    {              
+                            stream.WriteLine("_____________|_________________________|");
+                            stream.WriteLine((i + 1).ToString() + "                       " + Math.Round((solutionEq.result[i] - 273), 2));
                     }
-                    stream.Write("\n");
+                    stream.Write("_____________|_________________________|");
                 }
-                stream.Write("_____________|____________________|");
             }
         }
         /// <summary>
