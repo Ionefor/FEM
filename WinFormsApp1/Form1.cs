@@ -93,6 +93,18 @@ namespace WinFormsApp1
             Kyy.Text = Ky.ToString();
             Qv.Text = Q.ToString();
 
+        /*    points[0].X = 1;
+            points[0].Y = 1;
+
+            points[1].X = 4;
+            points[1].Y = 0;
+
+            points[2].X = 4;
+            points[2].Y = 4;
+
+            points[3].X = 0;
+            points[3].Y = 4;*/
+
             h[0] = 150;
             t_inf[0] = 320;
             q[0] = 0;
@@ -189,7 +201,7 @@ namespace WinFormsApp1
             area = new Area(points);
             area.ShiftingPointsArea();
 
-            triangulation = new Triangulation(area.points);
+            triangulation = new Triangulation(area.points, XOY);
             triangulation.InitialPartitioning();
             triangulation.Delaunaytriangulation();
             triangulation.DeterminingNodeNumbers();
@@ -661,7 +673,7 @@ namespace WinFormsApp1
                 area = new Area(points);
                 area.ShiftingPointsArea();
 
-                triangulation = new Triangulation(area.points);
+                triangulation = new Triangulation(area.points, XOY);
                 triangulation.InitialPartitioning();
                 triangulation.Delaunaytriangulation();
                 triangulation.DeterminingNodeNumbers();

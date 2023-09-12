@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MKEv2.0\\WinFormsApp1\\MKE.csproj": {}
+    "G:\\Programming\\FEM-main\\WinFormsApp1\\MKE.csproj": {}
   },
   "projects": {
-    "D:\\MKEv2.0\\WinFormsApp1\\MKE.csproj": {
+    "G:\\Programming\\FEM-main\\WinFormsApp1\\MKE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MKEv2.0\\WinFormsApp1\\MKE.csproj",
+        "projectUniqueName": "G:\\Programming\\FEM-main\\WinFormsApp1\\MKE.csproj",
         "projectName": "MKE",
-        "projectPath": "D:\\MKEv2.0\\WinFormsApp1\\MKE.csproj",
+        "projectPath": "G:\\Programming\\FEM-main\\WinFormsApp1\\MKE.csproj",
         "packagesPath": "C:\\Users\\gusev\\.nuget\\packages\\",
-        "outputPath": "D:\\MKEv2.0\\WinFormsApp1\\obj\\",
+        "outputPath": "G:\\Programming\\FEM-main\\WinFormsApp1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

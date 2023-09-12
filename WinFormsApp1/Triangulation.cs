@@ -73,8 +73,12 @@
         /// </summary>
         /// 
         public List<Nodes> nodes = new List<Nodes>();
-
-        public Triangulation(PointF[] points) => this.points = points;       
+        Panel XOY { get; set; }////////
+        public Triangulation(PointF[] points, Panel XOY)
+        {
+            this.XOY = XOY;
+            this.points = points;
+        }     
         public Triangulation()
         {
           
@@ -177,24 +181,33 @@
         /// </summary>
         public void Delaunaytriangulation()
         {
-            double h = ShortestEdgeTriagnle() / 5;
-            double B = Math.Sqrt(2);
+            double hInitial = ShortestEdgeTriagnle();
+          
             PointF midPoint = new PointF();
-            int stopCount = 0;
+            int stepCount = 0;
             step_two:;
-
-            AddBadTriangles(B, h);
+            GraphicsMke g = new GraphicsMke(XOY, triangulation);
+            AddBadTriangles(hInitial);
 
             while (badTriangle.Count != 0)
             {
-                stopCount++;
-                if(stopCount == 25)
+                stepCount++;
+
+                if(stepCount == 400)
                 {
+                   // MessageBox.Show("da11");
+                   // break;
+                }
+
+                if (stepCount >= 450)
+                {
+                    MessageBox.Show("da2");
                     break;
                 }
-                int index = GetIndexWorstTriangle(h);
-
-                for (int i = 0; i < triangulation.Count; i++)
+                int index = GetIndexWorstTriangle(hInitial);
+            //  g.DisplayAllTriangles();
+             //   g.DisplayTriangle(badTriangle[index], Color.Red);
+                /*for (int i = 0; i < triangulation.Count; i++)
                 {
                     if (!EqualTriangle(triangulation[i], badTriangle[index]))
                     {
@@ -226,6 +239,37 @@
                             goto step_two;
                         }
                     }
+                }*/
+
+                for (int i = 0; i < triangulation.Count; i++)
+                {
+                    if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex1, triangulation[i].vertex2))
+                    {
+                        midPoint.X = (triangulation[i].vertex1.X + triangulation[i].vertex2.X) / 2;
+                        midPoint.Y = (triangulation[i].vertex1.Y + triangulation[i].vertex2.Y) / 2;
+
+                        AddPoint(midPoint);
+
+                        goto step_two;
+                    }
+                    else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex2, triangulation[i].vertex3))
+                    {
+                        midPoint.X = (triangulation[i].vertex2.X + triangulation[i].vertex3.X) / 2;
+                        midPoint.Y = (triangulation[i].vertex2.Y + triangulation[i].vertex3.Y) / 2;
+
+                        AddPoint(midPoint);
+
+                        goto step_two;
+                    }
+                    else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex3, triangulation[i].vertex1))
+                    {
+                        midPoint.X = (triangulation[i].vertex3.X + triangulation[i].vertex1.X) / 2;
+                        midPoint.Y = (triangulation[i].vertex3.Y + triangulation[i].vertex1.Y) / 2;
+
+                        AddPoint(midPoint);
+
+                        goto step_two;
+                    }
                 }
 
                 if (!PointBeyondArea(GetCenterPointCircleTriangle(badTriangle[index])))
@@ -239,6 +283,7 @@
 
                 goto step_two;
             }
+            MessageBox.Show(stepCount.ToString());
         }
         /// <summary>
         /// Нумерует узлы, полученной триангуляции Делоне
@@ -373,17 +418,21 @@
         /// <param name="B"></param>
         /// <param name="h"></param>
         /// <param name="XOY"></param>
-        private void AddBadTriangles(double B, double h)
+        private void AddBadTriangles(double hInitial)
         {
+            double B = Math.Sqrt(2);
+            double h = hInitial / 5;
+            double sumSides = 1;
+
             badTriangle.Clear();
 
             for (int i = 0; i < triangulation.Count; i++)
             {
-                if (GetCircumRadiusShortestEdgeRatio(triangulation[i]) > B && GetSumtSidesTriangle(triangulation[i]) > 2)//&& getSumtSidesTriangle(triangulation[i]) > 5
+                if (GetCircumRadiusShortestEdgeRatio(triangulation[i]) > B && GetSumtSidesTriangle(triangulation[i]) > sumSides)
                 {
                     badTriangle.Add(triangulation[i]);
                 }
-                else if (GetCircumRadius(triangulation[i]) > h && ShortestEdgeTriagnle(triangulation[i]) > h && GetSumtSidesTriangle(triangulation[i]) > 2)
+                else if (GetCircumRadius(triangulation[i]) > h && ShortestEdgeTriagnle(triangulation[i]) > h && GetSumtSidesTriangle(triangulation[i]) > sumSides)
                 {
                     badTriangle.Add(triangulation[i]);
                 }
@@ -775,24 +824,27 @@
             EdgesAndTriangle Temp = new EdgesAndTriangle();
             List<EdgesAndTriangle> edgesAndTriangles = new List<EdgesAndTriangle>();
             edgesAndTriangles.Clear();
-
+            double l1, l2, l3;
             for (int i = 0; i < triangulation.Count; i++)
             {
-                if ((GetDistancePoints(triangulation[i].vertex1, Point) + GetDistancePoints(triangulation[i].vertex2, Point)) == GetDistancePoints(triangulation[i].vertex1, triangulation[i].vertex2))
+                l1 = Math.Abs(GetDistancePoints(triangulation[i].vertex1, Point) + GetDistancePoints(triangulation[i].vertex2, Point) - GetDistancePoints(triangulation[i].vertex1, triangulation[i].vertex2));
+                if ( l1 < 0.000001)
                 {
                     Temp.NumTriangle = i;
                     Temp.NumEdge = 1;
 
                     edgesAndTriangles.Add(Temp);
                 }
-                else if ((GetDistancePoints(triangulation[i].vertex2, Point) + GetDistancePoints(triangulation[i].vertex3, Point)) == GetDistancePoints(triangulation[i].vertex2, triangulation[i].vertex3))
+                l2 = Math.Abs(GetDistancePoints(triangulation[i].vertex2, Point) + GetDistancePoints(triangulation[i].vertex3, Point) - GetDistancePoints(triangulation[i].vertex2, triangulation[i].vertex3));
+                if (l2 < 0.000001)
                 {
                     Temp.NumTriangle = i;
                     Temp.NumEdge = 2;
 
                     edgesAndTriangles.Add(Temp);
                 }
-                else if ((GetDistancePoints(triangulation[i].vertex3, Point) + GetDistancePoints(triangulation[i].vertex1, Point)) == GetDistancePoints(triangulation[i].vertex3, triangulation[i].vertex1))
+                l3 = Math.Abs(GetDistancePoints(triangulation[i].vertex3, Point) + GetDistancePoints(triangulation[i].vertex1, Point) - GetDistancePoints(triangulation[i].vertex3, triangulation[i].vertex1));
+                if (l3 < 0.000001)
                 {
                     Temp.NumTriangle = i;
                     Temp.NumEdge = 3;
@@ -1005,8 +1057,9 @@
 
             if (firstAngle > 120 || secondAngle > 120 || thirdAngle > 120)
             {
-                side = (firstAngle >= secondAngle) ? ((firstAngle >= thirdAngle) ? (2) : (1)) : ((secondAngle >= thirdAngle) ? (3) : (1));
+               
             }
+            side = (firstAngle >= secondAngle) ? ((firstAngle >= thirdAngle) ? (2) : (1)) : ((secondAngle >= thirdAngle) ? (3) : (1));
             return side;
         }
         private PointF[] GetVectorSideTriangle(Triangle triangle, int sideIndex)
@@ -1293,7 +1346,7 @@
             midPoint.X = (startPoint.X + endPoint.X) / 2;
             midPoint.Y = (startPoint.Y + endPoint.Y) / 2;
 
-            if (GetDistancePoints(GetCenterPointCircleTriangle(triangle), midPoint) <= GetDistancePoints(midPoint, startPoint))
+            if (GetDistancePoints(GetCenterPointCircleTriangle(triangle), midPoint) <= (GetDistancePoints(midPoint, startPoint) / 2 ))
             {
                 return true;
             }

@@ -18,8 +18,10 @@
         /// </summary>
         private List<Triangle> triangles { get; set; }
         private Graphics graphics;
+        Panel XOY { get; set; }
         public GraphicsMke(Panel XOY, List<Triangle> triangulation)
         {
+            this.XOY = XOY;
             panelHeight = XOY.Height;
             panelWidth = XOY.Width;
             triangles = triangulation;
@@ -37,11 +39,18 @@
             graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
             graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
         }
+        public void DisplayTriangle(Triangle triangle, Color color)
+        {
+            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y);
+            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
+        }
         /// <summary>
         ///Отрисовывает  на панели все треугольники
         /// </summary>
         public void DisplayAllTriangles()
         {
+            Clear(XOY);
             for (int i = 0; i < triangles.Count; i++)
             {
                 if (i == 0)
