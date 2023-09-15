@@ -1,13 +1,148 @@
-﻿namespace MKE
+﻿using OpenTK.Mathematics;
+using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+
+namespace MKE
 {
+    public struct PointD : IEquatable<PointD>
+    {
+        /// <summary>
+        /// Creates a new instance of the <see cref='MKE.PointD'/> class with member data left uninitialized.
+        /// </summary>
+        public static readonly PointD Empty;
+        private double x; // Do not rename (binary serialization)
+        private double y; // Do not rename (binary serialization)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref='MKE.PointD'/> class with the specified coordinates.
+        /// </summary>
+        public PointD(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref='MKE.PointD'/> struct from the specified
+        /// <see cref="OpenTK.Mathematics.Vector2d"/>.
+        /// </summary>
+        public PointD(Vector2d vector)
+        {
+            x = vector.X;
+            y = vector.Y;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="OpenTK.Mathematics.Vector2d"/> from this <see cref="MKE.PointD"/>.
+        /// </summary>
+
+        public readonly Vector2d ToVector2d() => new(x, y);
+        /// <summary>
+        /// Gets a value indicating whether this <see cref='MKE.PointD'/> is empty.
+        /// </summary>
+        [Browsable(false)]
+        public readonly bool IsEmpty => x == 0d && y == 0d;
+
+        /// <summary>
+        /// Gets the x-coordinate of this <see cref='MKE.PointD'/>.
+        /// </summary>
+        public double X
+        {
+            readonly get => x;
+            set => x = value;
+        }
+
+        /// <summary>
+        /// Gets the y-coordinate of this <see cref='MKE.PointD'/>.
+        /// </summary>
+        public double Y
+        {
+            readonly get => y;
+            set => y = value;
+        }
+
+        /// <summary>
+        /// Converts the specified <see cref="MKE.PointD"/> to a <see cref="OpenTK.Mathematics.Vector2d"/>.
+        /// </summary>
+
+
+        /// <summary>
+        /// Converts the specified <see cref="OpenTK.Mathematics.Vector2d"/> to a <see cref="MKE.PointD"/>.
+        /// </summary>
+        public static explicit operator PointD(Vector2d vector) => new(vector);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by a given <see cref='System.Drawing.Size'/> .
+        /// </summary>
+        public static PointD operator +(PointD pt, Size sz) => Add(pt, sz);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by the negative of a given <see cref='System.Drawing.Size'/> .
+        /// </summary>
+        public static PointD operator -(PointD pt, Size sz) => Subtract(pt, sz);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by a given <see cref='System.Drawing.SizeF'/> .
+        /// </summary>
+        public static PointD operator +(PointD pt, SizeF sz) => Add(pt, sz);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by the negative of a given <see cref='System.Drawing.SizeF'/> .
+        /// </summary>
+        public static PointD operator -(PointD pt, SizeF sz) => Subtract(pt, sz);
+
+        /// <summary>
+        /// Compares two <see cref='MKE.PointD'/> objects. The result specifies whether the values of the
+        /// <see cref='MKE.PointD.X'/> and <see cref='MKE.PointD.Y'/> properties of the two
+        /// <see cref='MKE.PointD'/> objects are equal.
+        /// </summary>
+        public static bool operator ==(PointD left, PointD right) => left.X == right.X && left.Y == right.Y;
+
+        /// <summary>
+        /// Compares two <see cref='MKE.PointD'/> objects. The result specifies whether the values of the
+        /// <see cref='MKE.PointD.X'/> or <see cref='MKE.PointD.Y'/> properties of the two
+        /// <see cref='MKE.PointD'/> objects are unequal.
+        /// </summary>
+        public static bool operator !=(PointD left, PointD right) => !(left == right);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by a given <see cref='System.Drawing.Size'/> .
+        /// </summary>
+        public static PointD Add(PointD pt, Size sz) => new(pt.X + sz.Width, pt.Y + sz.Height);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by the negative of a given <see cref='System.Drawing.Size'/> .
+        /// </summary>
+        public static PointD Subtract(PointD pt, Size sz) => new(pt.X - sz.Width, pt.Y - sz.Height);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by a given <see cref='System.Drawing.SizeF'/> .
+        /// </summary>
+        public static PointD Add(PointD pt, SizeF sz) => new(pt.X + sz.Width, pt.Y + sz.Height);
+
+        /// <summary>
+        /// Translates a <see cref='MKE.PointD'/> by the negative of a given <see cref='System.Drawing.SizeF'/> .
+        /// </summary>
+        public static PointD Subtract(PointD pt, SizeF sz) => new(pt.X - sz.Width, pt.Y - sz.Height);
+
+        public override readonly bool Equals([NotNullWhen(true)] object? obj) => obj is PointD && Equals((PointD)obj);
+
+        public readonly bool Equals(PointD other) => this == other;
+
+        public override readonly int GetHashCode() => HashCode.Combine(X.GetHashCode(), Y.GetHashCode());
+
+        public override readonly string ToString() => $"{{X={x}, Y={y}}}";
+    }
     /// <summary>
     ///Структура "Треугольник", содержащая в себе вершины треугольника и их номера
     /// </summary>
     public struct Triangle
     {
-        public PointF vertex1;
-        public PointF vertex2;
-        public PointF vertex3;
+        public PointD vertex1;
+        public PointD vertex2;
+        public PointD vertex3;
 
         public int vertex1NumNodes;
         public int vertex2NumNodes;
@@ -34,10 +169,10 @@
     /// </summary>
     public struct Nodes
     {
-        public PointF Node;
+        public PointD Node;
         public int NumNode;
 
-        public Nodes(PointF Node, int NumNode)
+        public Nodes(PointD Node, int NumNode)
         {
             this.Node = Node;
             this.NumNode = NumNode;
@@ -48,40 +183,26 @@
     /// </summary>
     public class Triangulation
     {
-        /// <summary>
-        /// Счетчик узлов сетки
-        /// </summary>
-        private int countNodes = 1;
+        private int SizeGridChoice { get; set; }
         /// <summary>
         /// Начальный массив точек области
         /// </summary>
-        private PointF[] points { get; set; }
+        private PointD[] Points { get; set; }
         /// <summary>
         /// Список структур треугольников триангуляции Делоне
         /// </summary>
-        public List<Triangle> triangulation = new List<Triangle>();
-        /// <summary>
-        /// Список точек после разбиения изначальных сторон области пополам
-        /// </summary>
-        private List<PointF> splitPoints;
-        /// <summary>
-        /// Треугольники, не подходящие под условия триангуляции
-        /// </summary>
-        private List<Triangle> badTriangle = new List<Triangle>();
+        public List<Triangle> Triangles { get; private set; }
         /// <summary>
         /// Узлы сетки
         /// </summary>
         /// 
-        public List<Nodes> nodes = new List<Nodes>();
-        Panel XOY { get; set; }////////
-        public Triangulation(PointF[] points, Panel XOY)
+        public List<Nodes> Nodes { get; private set; }
+        public Triangulation(PointD[] points, int sizeGridChoice)
         {
-            this.XOY = XOY;
-            this.points = points;
-        }     
-        public Triangulation()
-        {
-          
+            SizeGridChoice = sizeGridChoice;
+            Points = points;
+            Triangles = new();
+            Nodes = new();
         }
 
         /// <summary>
@@ -89,8 +210,8 @@
         /// </summary>
         public void InitialPartitioning()
         {
-            PointF[] vectors = new PointF[2];
-            Triangle tempTriangle = new Triangle();
+            PointD[] vectors;
+            Triangle tempTriangle = new();
 
             int iFirstIndex, iSecondIndex, iThirdIndex;
             int jFirstIndex, jSecondIndex, jThirdIndex;
@@ -99,7 +220,7 @@
 
             double currentAngle, minAngle = 360;
 
-            splitPoints = MiddleSplitEdges();
+             List<PointD> splitPoints = MiddleSplitEdges();
 
             int numberOfPoints = splitPoints.Count;
 
@@ -165,11 +286,11 @@
                 tempTriangle.vertex2 = splitPoints[iSecondIndex];
                 tempTriangle.vertex3 = splitPoints[iThirdIndex];
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
-               FlipBadEdges(triangulation[triangulation.Count - 1], VertexMaxAngle(triangulation[triangulation.Count - 1]));
+               FlipBadEdges(Triangles[Triangles.Count - 1], VertexMaxAngle(Triangles[Triangles.Count - 1]));
 
-                if (RemovePoint(splitPoints[iSecondIndex], triangulation))
+                if (RemovePoint(splitPoints[iSecondIndex], Triangles, splitPoints))
                 {
                     splitPoints.RemoveAt(iSecondIndex);
                 }
@@ -179,92 +300,40 @@
         /// <summary>
         /// Выполняет триангуляцию Делоне ..........
         /// </summary>
-        public void Delaunaytriangulation()
+        public void DelaunayTriangulation()
         {
-            double hInitial = ShortestEdgeTriagnle();
-          
-            PointF midPoint = new PointF();
-            int stepCount = 0;
+            PointD midPoint = new();
+            double hInitial = ShortestEdgeTriagnle();      
+
             step_two:;
-            GraphicsMke g = new GraphicsMke(XOY, triangulation);
-            AddBadTriangles(hInitial);
+            int indexBadTriangle = FindIndexBadTriangle(hInitial);
 
-            while (badTriangle.Count != 0)
+            if (indexBadTriangle != -1)
             {
-                stepCount++;
-
-                if(stepCount == 400)
+                for (int i = 0; i < Triangles.Count; i++)
                 {
-                   // MessageBox.Show("da11");
-                   // break;
-                }
-
-                if (stepCount >= 450)
-                {
-                    MessageBox.Show("da2");
-                    break;
-                }
-                int index = GetIndexWorstTriangle(hInitial);
-            //  g.DisplayAllTriangles();
-             //   g.DisplayTriangle(badTriangle[index], Color.Red);
-                /*for (int i = 0; i < triangulation.Count; i++)
-                {
-                    if (!EqualTriangle(triangulation[i], badTriangle[index]))
+                    if (PointIsDiametralCircle(Triangles[indexBadTriangle], Triangles[i].vertex1, Triangles[i].vertex2))
                     {
-                        if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex1, triangulation[i].vertex2))
-                        {
-                            midPoint.X = (badTriangle[index].vertex1.X + badTriangle[index].vertex2.X) / 2;
-                            midPoint.Y = (badTriangle[index].vertex1.Y + badTriangle[index].vertex2.Y) / 2;
-
-                            AddPoint(midPoint);
-
-                            goto step_two;
-                        }
-                        else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex2, triangulation[i].vertex3))
-                        {
-                            midPoint.X = (badTriangle[index].vertex2.X + badTriangle[index].vertex3.X) / 2;
-                            midPoint.Y = (badTriangle[index].vertex2.Y + badTriangle[index].vertex3.Y) / 2;
-
-                            AddPoint(midPoint);
-
-                            goto step_two;
-                        }
-                        else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex3, triangulation[i].vertex1))
-                        {
-                            midPoint.X = (badTriangle[index].vertex3.X + badTriangle[index].vertex1.X) / 2;
-                            midPoint.Y = (badTriangle[index].vertex3.Y + badTriangle[index].vertex1.Y) / 2;
-
-                            AddPoint(midPoint);
-
-                            goto step_two;
-                        }
-                    }
-                }*/
-
-                for (int i = 0; i < triangulation.Count; i++)
-                {
-                    if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex1, triangulation[i].vertex2))
-                    {
-                        midPoint.X = (triangulation[i].vertex1.X + triangulation[i].vertex2.X) / 2;
-                        midPoint.Y = (triangulation[i].vertex1.Y + triangulation[i].vertex2.Y) / 2;
+                        midPoint.X = (Triangles[i].vertex1.X + Triangles[i].vertex2.X) / 2;
+                        midPoint.Y = (Triangles[i].vertex1.Y + Triangles[i].vertex2.Y) / 2;
 
                         AddPoint(midPoint);
 
                         goto step_two;
                     }
-                    else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex2, triangulation[i].vertex3))
+                    else if (PointIsDiametralCircle(Triangles[indexBadTriangle], Triangles[i].vertex2, Triangles[i].vertex3))
                     {
-                        midPoint.X = (triangulation[i].vertex2.X + triangulation[i].vertex3.X) / 2;
-                        midPoint.Y = (triangulation[i].vertex2.Y + triangulation[i].vertex3.Y) / 2;
+                        midPoint.X = (Triangles[i].vertex2.X + Triangles[i].vertex3.X) / 2;
+                        midPoint.Y = (Triangles[i].vertex2.Y + Triangles[i].vertex3.Y) / 2;
 
                         AddPoint(midPoint);
 
                         goto step_two;
                     }
-                    else if (PointIsDiametralCircle(badTriangle[index], triangulation[i].vertex3, triangulation[i].vertex1))
+                    else if (PointIsDiametralCircle(Triangles[indexBadTriangle], Triangles[i].vertex3, Triangles[i].vertex1))
                     {
-                        midPoint.X = (triangulation[i].vertex3.X + triangulation[i].vertex1.X) / 2;
-                        midPoint.Y = (triangulation[i].vertex3.Y + triangulation[i].vertex1.Y) / 2;
+                        midPoint.X = (Triangles[i].vertex3.X + Triangles[i].vertex1.X) / 2;
+                        midPoint.Y = (Triangles[i].vertex3.Y + Triangles[i].vertex1.Y) / 2;
 
                         AddPoint(midPoint);
 
@@ -272,47 +341,46 @@
                     }
                 }
 
-                if (!PointBeyondArea(GetCenterPointCircleTriangle(badTriangle[index])))
+                if (!PointBeyondArea(GetCenterPointCircleTriangle(Triangles[indexBadTriangle])))
                 {
-                    AddPoint(GetCenterPointCircleTriangle(badTriangle[index]));
+                    AddPoint(GetCenterPointCircleTriangle(Triangles[indexBadTriangle]));
                 }
                 else
                 {
-                    SplitHeightTriangle(badTriangle[index]);
+                    SplitHeightTriangle(Triangles[indexBadTriangle]);
                 }
 
                 goto step_two;
             }
-            MessageBox.Show(stepCount.ToString());
         }
         /// <summary>
         /// Нумерует узлы, полученной триангуляции Делоне
         /// </summary>
         public void DeterminingNodeNumbers()
         {            
-            List<PointF> allPoints = new List<PointF>();
-            
-            for (int i = 0; i < triangulation.Count; i++)
+            List<PointD> allPoints = new();
+            int countNodes = 1;
+            for (int i = 0; i < Triangles.Count; i++)
             {
-                if (!ExistNode(triangulation[i].vertex1, ref allPoints))
+                if (!ExistNode(Triangles[i].vertex1, ref allPoints))
                 {
-                    allPoints.Add(triangulation[i].vertex1);
+                    allPoints.Add(Triangles[i].vertex1);
                 }
 
-                if (!ExistNode(triangulation[i].vertex2, ref allPoints))
+                if (!ExistNode(Triangles[i].vertex2, ref allPoints))
                 {
-                    allPoints.Add(triangulation[i].vertex2);
+                    allPoints.Add(Triangles[i].vertex2);
                 }
 
-                if (!ExistNode(triangulation[i].vertex3, ref allPoints))
+                if (!ExistNode(Triangles[i].vertex3, ref allPoints))
                 {
-                    allPoints.Add(triangulation[i].vertex3);
+                    allPoints.Add(Triangles[i].vertex3);
                 }
             }
            
             while (allPoints.Count > 0)
             {
-                IterationNumbering(allPoints);
+                countNodes = IterationNumbering(allPoints, countNodes);
             }
 
             EqualityVertexAndNodes();
@@ -321,15 +389,15 @@
         /// Разделяет ребра области, вставляя точки по середине ребра.
         /// </summary>
         /// <returns></returns>
-        private List<PointF> MiddleSplitEdges()
+        private List<PointD> MiddleSplitEdges()
         {
-            PointF midPoint = new PointF();
-            PointF startPoint = points[points.Length - 1];
-            List<PointF> splitPoints = new List<PointF>();
-
-            for (int i = 0; i < points.Length; i++)
+            PointD midPoint = new();
+            List<PointD> splitPoints = new();
+            PointD startPoint = Points[Points.Length - 1];
+            
+            for (int i = 0; i < Points.Length; i++)
             {
-                PointF endPoint = points[i];
+                PointD endPoint = Points[i];
 
                 midPoint.X = (startPoint.X + endPoint.X) / 2;
                 midPoint.Y = (startPoint.Y + endPoint.Y) / 2;
@@ -348,29 +416,29 @@
         /// <param name="CurrentPoint"></param>
         /// <param name="Triangles"></param>
         /// <returns></returns>
-        private bool RemovePoint(PointF CurrentPoint, List<Triangle> Triangles)
+        private static  bool RemovePoint(PointD currentPoint, List<Triangle> triangles, List<PointD> splitPoints)
         {
             bool flagO = false, flagN = false;
-            int Count;
+            int count;
 
             for (int i = 0; i < splitPoints.Count; i++)
             {
-                if (CurrentPoint == splitPoints[i])
+                if (currentPoint == splitPoints[i])
                 {
-                    for (int j = 0; j < Triangles.Count; j++)
+                    for (int j = 0; j < triangles.Count; j++)
                     {
                         if (i == 0)
                         {
-                            Count = splitPoints.Count - 1;
+                            count = splitPoints.Count - 1;
 
-                            if (splitPoints[Count] == Triangles[j].vertex1 || splitPoints[Count] == Triangles[j].vertex2 || splitPoints[Count] == Triangles[j].vertex3)
+                            if (splitPoints[count] == triangles[j].vertex1 || splitPoints[count] == triangles[j].vertex2 || splitPoints[count] == triangles[j].vertex3)
                             {
                                 flagO = true;
                             }
                         }
                         else
                         {
-                            if (splitPoints[i - 1] == Triangles[j].vertex1 || splitPoints[i - 1] == Triangles[j].vertex2 || splitPoints[i - 1] == Triangles[j].vertex3)
+                            if (splitPoints[i - 1] == triangles[j].vertex1 || splitPoints[i - 1] == triangles[j].vertex2 || splitPoints[i - 1] == triangles[j].vertex3)
                             {
                                 flagO = true;
                             }
@@ -378,15 +446,15 @@
 
                         if (i == splitPoints.Count - 1)
                         {
-                            Count = 0;
-                            if (splitPoints[Count] == Triangles[j].vertex1 || splitPoints[Count] == Triangles[j].vertex2 || splitPoints[Count] == Triangles[j].vertex3)
+                            count = 0;
+                            if (splitPoints[count] == triangles[j].vertex1 || splitPoints[count] == triangles[j].vertex2 || splitPoints[count] == triangles[j].vertex3)
                             {
                                 flagN = true;
                             }
                         }
                         else
                         {
-                            if (splitPoints[i + 1] == Triangles[j].vertex1 || splitPoints[i + 1] == Triangles[j].vertex2 || splitPoints[i + 1] == Triangles[j].vertex3)
+                            if (splitPoints[i + 1] == triangles[j].vertex1 || splitPoints[i + 1] == triangles[j].vertex2 || splitPoints[i + 1] == triangles[j].vertex3)
                             {
                                 flagN = true;
                             }
@@ -397,192 +465,119 @@
 
             if (flagN && flagO)
             {
-                flagO = false;
-                flagN = false;
-
                 return true;
             }
-            else
-            {
-                flagO = false;
-                flagN = false;
 
-                return false;
-            }
-
-
+            return false;
         }
         /// <summary>
-        /// Находит "плохие" треугольники и добавляет их в массив.
+        ///Находит и возвращает индекс самого плохого треугольника или -1 в противном случае
         /// </summary>
         /// <param name="B"></param>
         /// <param name="h"></param>
         /// <param name="XOY"></param>
-        private void AddBadTriangles(double hInitial)
+        private int FindIndexBadTriangle(double hInitial)
         {
-            double B = Math.Sqrt(2);
-            double h = hInitial / 5;
-            double sumSides = 1;
+            double h, desiredSumSides, B = Math.Sqrt(2);
+            double maxSumSides = 0;
+            int indexBadTriangle = -1;
 
-            badTriangle.Clear();
-
-            for (int i = 0; i < triangulation.Count; i++)
+            if (SizeGridChoice == 1)
             {
-                if (GetCircumRadiusShortestEdgeRatio(triangulation[i]) > B && GetSumtSidesTriangle(triangulation[i]) > sumSides)
-                {
-                    badTriangle.Add(triangulation[i]);
-                }
-                else if (GetCircumRadius(triangulation[i]) > h && ShortestEdgeTriagnle(triangulation[i]) > h && GetSumtSidesTriangle(triangulation[i]) > sumSides)
-                {
-                    badTriangle.Add(triangulation[i]);
-                }
+                h = hInitial;
+                desiredSumSides = 3;
             }
-        }
-        /// <summary>
-        /// Возвращает индекс самого "плохого" треугольника.
-        /// </summary>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        private int GetIndexWorstTriangle(double h)
-        {
-            double maxDifference = 0;
-            int index = -1;
+            else if (SizeGridChoice == 2)
+            {
+                h = hInitial / 3;
+                desiredSumSides = 2;
+            }
+            else
+            {
+                h = hInitial / 5;
+                desiredSumSides = 1;
+            }
 
-            for (int i = 0; i < badTriangle.Count; i++)
-            {               
-                if (GetSumtSidesTriangle(badTriangle[i]) > maxDifference)
+            for (int i = 0; i < Triangles.Count; i++)
+            {
+                if (GetCircumRadiusShortestEdgeRatio(Triangles[i]) > B && GetSumtSidesTriangle(Triangles[i]) > desiredSumSides)
                 {
-                    maxDifference = GetSumtSidesTriangle(badTriangle[i]);
-                    index = i;
+                   
+                }
+                else if (GetCircumRadius(Triangles[i]) > h && ShortestEdgeTriagnle(Triangles[i]) > h && GetSumtSidesTriangle(Triangles[i]) > desiredSumSides)
+                {
+                    
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (GetSumtSidesTriangle(Triangles[i]) > maxSumSides)
+                {
+                    maxSumSides = GetSumtSidesTriangle(Triangles[i]);
+                    indexBadTriangle = i;
                 }
             }
-            return index;
+            
+            return indexBadTriangle;
         }
         /// <summary>
         /// Добавляет точку в сетку
         /// </summary>
         /// <param name="addedPoint"></param>
-        private void AddPoint(PointF addedPoint)
+        private void AddPoint(PointD addedPoint)
         {
-            int indexTriangle = 0;
-            Triangle tempTriangle = new Triangle();
             List<EdgesAndTriangle> edgesAndTriangles = PointOnSideTriangle(addedPoint);
 
-            if (edgesAndTriangles != null)
+            if (edgesAndTriangles.Count != 0)
             {
-                for (int j = 0; j < edgesAndTriangles.Count; j++)
+                for (int i = 0; i < edgesAndTriangles.Count; i++)
                 {
-                    if (edgesAndTriangles[j].NumEdge == 1)
-                    {
-                        tempTriangle.vertex1 = triangulation[edgesAndTriangles[j].NumTriangle].vertex1;
-                        tempTriangle.vertex2 = addedPoint;
-                        tempTriangle.vertex3 = triangulation[edgesAndTriangles[j].NumTriangle].vertex3;
-
-                       // tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-
-                        tempTriangle.vertex1 = addedPoint;
-                        tempTriangle.vertex2 = triangulation[edgesAndTriangles[j].NumTriangle].vertex2;
-                        tempTriangle.vertex3 = triangulation[edgesAndTriangles[j].NumTriangle].vertex3;
-
-                       // tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-                    }
-                    else if (edgesAndTriangles[j].NumEdge == 2)
-                    {
-                        tempTriangle.vertex1 = triangulation[edgesAndTriangles[j].NumTriangle].vertex1;
-                        tempTriangle.vertex2 = triangulation[edgesAndTriangles[j].NumTriangle].vertex2;
-                        tempTriangle.vertex3 = addedPoint;
-
-                      //  tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-
-                        tempTriangle.vertex1 = addedPoint;
-                        tempTriangle.vertex2 = triangulation[edgesAndTriangles[j].NumTriangle].vertex3;
-                        tempTriangle.vertex3 = triangulation[edgesAndTriangles[j].NumTriangle].vertex1;
-
-                      //  tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-                    }
-                    else if (edgesAndTriangles[j].NumEdge == 3)
-                    {
-                        tempTriangle.vertex1 = triangulation[edgesAndTriangles[j].NumTriangle].vertex1;
-                        tempTriangle.vertex2 = triangulation[edgesAndTriangles[j].NumTriangle].vertex2;
-                        tempTriangle.vertex3 = addedPoint;
-
-                      //  tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-
-                        tempTriangle.vertex1 = addedPoint;
-                        tempTriangle.vertex2 = triangulation[edgesAndTriangles[j].NumTriangle].vertex2;
-                        tempTriangle.vertex3 = triangulation[edgesAndTriangles[j].NumTriangle].vertex3;
-
-                       // tempTriangle = sortVertexTriangle(ref tempTriangle);
-                        triangulation.Add(tempTriangle);
-                    }
+                    SplitNeighborTriangles(edgesAndTriangles[i].NumEdge, edgesAndTriangles[i].NumTriangle, addedPoint);
                 }
 
                 if (edgesAndTriangles.Count != 1)
                 {
                     if (edgesAndTriangles[0].NumTriangle > edgesAndTriangles[1].NumTriangle)
                     {
-                        triangulation.RemoveAt(edgesAndTriangles[0].NumTriangle);
-                        triangulation.RemoveAt(edgesAndTriangles[1].NumTriangle);
+                        Triangles.RemoveAt(edgesAndTriangles[0].NumTriangle);
+                        Triangles.RemoveAt(edgesAndTriangles[1].NumTriangle);
                     }
                     else
                     {
-                        triangulation.RemoveAt(edgesAndTriangles[1].NumTriangle);
-                        triangulation.RemoveAt(edgesAndTriangles[0].NumTriangle);
+                        Triangles.RemoveAt(edgesAndTriangles[1].NumTriangle);
+                        Triangles.RemoveAt(edgesAndTriangles[0].NumTriangle);
                     }
 
-                    FlipBadEdges(triangulation[triangulation.Count - 4], addedPoint);
-                    FlipBadEdges(triangulation[triangulation.Count - 3], addedPoint);
-                    FlipBadEdges(triangulation[triangulation.Count - 2], addedPoint);
-                    FlipBadEdges(triangulation[triangulation.Count - 1], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 4], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 3], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 2], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 1], addedPoint);
                 }
                 else
                 {
-                    triangulation.RemoveAt(edgesAndTriangles[0].NumTriangle);
+                    Triangles.RemoveAt(edgesAndTriangles[0].NumTriangle);
 
-                    FlipBadEdges(triangulation[triangulation.Count - 2], addedPoint);
-                    FlipBadEdges(triangulation[triangulation.Count - 1], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 2], addedPoint);
+                    FlipBadEdges(Triangles[Triangles.Count - 1], addedPoint);
                 }
             }
             else
             {
-                for (int i = 0; i < triangulation.Count; i++)
+                for (int i = 0; i < Triangles.Count; i++)
                 {
-                    if (PointOnTriangle(triangulation[i], addedPoint))
+                    if (PointOnTriangle(Triangles[i], addedPoint))
                     {
-                        indexTriangle = i;
+                        SplitTriangle(i, addedPoint);
+                        Triangles.RemoveAt(i);
 
+                        FlipBadEdges(Triangles[Triangles.Count - 3], addedPoint);
+                        FlipBadEdges(Triangles[Triangles.Count - 2], addedPoint);
+                        FlipBadEdges(Triangles[Triangles.Count - 1], addedPoint);
+                        break;
                     }
-                }
-
-                tempTriangle.vertex1 = triangulation[indexTriangle].vertex1;
-                tempTriangle.vertex2 = triangulation[indexTriangle].vertex2;
-                tempTriangle.vertex3 = addedPoint;
-
-               // tempTriangle = sortVertexTriangle(ref tempTriangle);
-                triangulation.Add(tempTriangle);
-
-                tempTriangle.vertex1 = triangulation[indexTriangle].vertex1;
-                tempTriangle.vertex2 = addedPoint;
-                tempTriangle.vertex3 = triangulation[indexTriangle].vertex3;
-
-              //  tempTriangle = sortVertexTriangle(ref tempTriangle);
-                triangulation.Add(tempTriangle);
-
-                tempTriangle.vertex1 = addedPoint;
-                tempTriangle.vertex2 = triangulation[indexTriangle].vertex2;
-                tempTriangle.vertex3 = triangulation[indexTriangle].vertex3;
-
-               // tempTriangle = sortVertexTriangle(ref tempTriangle);
-                triangulation.Add(tempTriangle);
-                
-                FlipBadEdges(triangulation[triangulation.Count - 3], addedPoint);
-                FlipBadEdges(triangulation[triangulation.Count - 2], addedPoint);
-                FlipBadEdges(triangulation[triangulation.Count - 1], addedPoint);
+                }              
             }
         }
         /// <summary>
@@ -590,7 +585,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <param name="newPoint"></param>
-        private void FlipBadEdges(Triangle triangle, PointF newPoint)
+        private void FlipBadEdges(Triangle triangle, PointD newPoint)
         {
             Triangle[] tempTriangle = new Triangle[2];
 
@@ -610,67 +605,61 @@
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex1;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
 
-                         //   tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
                             tempTriangle[1].vertex2 = triangle.vertex2;
                             tempTriangle[1].vertex3 = newPoint;
 
-                          //  tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 2)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex1;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
 
-                         //   tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
                             tempTriangle[1].vertex2 = triangle.vertex2;
                             tempTriangle[1].vertex3 = newPoint;
 
-                          //  tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 3)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex1;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
 
-                          //  tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
                             tempTriangle[1].vertex2 = triangle.vertex2;
                             tempTriangle[1].vertex3 = newPoint;
 
-                          //  tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                     }
                     else if (commonEdgeIndex == 2)
@@ -679,67 +668,61 @@
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex2;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
 
-                          //  tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
                             tempTriangle[1].vertex2 = triangle.vertex3;
                             tempTriangle[1].vertex3 = newPoint;
 
-                         //   tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 2)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex2;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
 
-                          //  tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
                             tempTriangle[1].vertex2 = triangle.vertex3;
                             tempTriangle[1].vertex3 = newPoint;
 
-                         //   tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 3)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex2;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
 
-                          //  tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
                             tempTriangle[1].vertex2 = triangle.vertex3;
                             tempTriangle[1].vertex3 = newPoint;
 
-                          //  tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                     }
                     else if (commonEdgeIndex == 3)
@@ -748,67 +731,61 @@
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex3;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
 
-                         //   tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex3;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex3;
                             tempTriangle[1].vertex2 = triangle.vertex1;
                             tempTriangle[1].vertex3 = newPoint;
 
-                          //  tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 2)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex3;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
 
-                         //   tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex1;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex1;
                             tempTriangle[1].vertex2 = triangle.vertex1;
                             tempTriangle[1].vertex3 = newPoint;
 
-                         //   tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint);
                         }
                         else if (edgesAndTriangleNeighbor.NumEdge == 3)
                         {
                             tempTriangle[0].vertex1 = newPoint;
                             tempTriangle[0].vertex2 = triangle.vertex3;
-                            tempTriangle[0].vertex3 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[0].vertex3 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
 
-                         //   tempTriangle[0] = sortVertextriangle(ref tempTriangle[0]);
-                            triangulation.Add(tempTriangle[0]);
+                            Triangles.Add(tempTriangle[0]);
 
-                            tempTriangle[1].vertex1 = triangulation[edgesAndTriangleNeighbor.NumTriangle].vertex2;
+                            tempTriangle[1].vertex1 = Triangles[edgesAndTriangleNeighbor.NumTriangle].vertex2;
                             tempTriangle[1].vertex2 = triangle.vertex1;
                             tempTriangle[1].vertex3 = newPoint;
 
-                         //   tempTriangle[1] = sortVertextriangle(ref tempTriangle[1]);
-                            triangulation.Add(tempTriangle[1]);
+                            Triangles.Add(tempTriangle[1]);
 
-                            triangulation.Remove(triangle);
-                            triangulation.Remove(triangulation[edgesAndTriangleNeighbor.NumTriangle]);
+                            Triangles.Remove(triangle);
+                            Triangles.Remove(Triangles[edgesAndTriangleNeighbor.NumTriangle]);
 
-                            FlipBadEdges(tempTriangle[0], newPoint);
-                            FlipBadEdges(tempTriangle[1], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 2], newPoint);
+                            FlipBadEdges(Triangles[Triangles.Count - 1], newPoint); ;
                         }
                     }
                 }
@@ -819,72 +796,153 @@
         /// </summary>
         /// <param name="Point"></param>
         /// <returns></returns>
-        private List<EdgesAndTriangle> PointOnSideTriangle(PointF Point)
+        private List<EdgesAndTriangle> PointOnSideTriangle(PointD point)
         {
-            EdgesAndTriangle Temp = new EdgesAndTriangle();
-            List<EdgesAndTriangle> edgesAndTriangles = new List<EdgesAndTriangle>();
-            edgesAndTriangles.Clear();
-            double l1, l2, l3;
-            for (int i = 0; i < triangulation.Count; i++)
+            EdgesAndTriangle temp = new();
+            List<EdgesAndTriangle> edgesAndTriangles = new();
+          
+            for (int i = 0; i < Triangles.Count; i++)
             {
-                l1 = Math.Abs(GetDistancePoints(triangulation[i].vertex1, Point) + GetDistancePoints(triangulation[i].vertex2, Point) - GetDistancePoints(triangulation[i].vertex1, triangulation[i].vertex2));
-                if ( l1 < 0.000001)
+                if (point != Triangles[i].vertex1 && point != Triangles[i].vertex2 && point != Triangles[i].vertex3)
                 {
-                    Temp.NumTriangle = i;
-                    Temp.NumEdge = 1;
+                    if (Math.Abs(GetDistancePoints(Triangles[i].vertex1, point) + GetDistancePoints(Triangles[i].vertex2, point) - GetDistancePoints(Triangles[i].vertex1, Triangles[i].vertex2)) == 0)
+                    {
+                        temp.NumTriangle = i;
+                        temp.NumEdge = 1;
 
-                    edgesAndTriangles.Add(Temp);
-                }
-                l2 = Math.Abs(GetDistancePoints(triangulation[i].vertex2, Point) + GetDistancePoints(triangulation[i].vertex3, Point) - GetDistancePoints(triangulation[i].vertex2, triangulation[i].vertex3));
-                if (l2 < 0.000001)
-                {
-                    Temp.NumTriangle = i;
-                    Temp.NumEdge = 2;
+                        if (!AddEdgesAndTriangles(edgesAndTriangles, temp))
+                        {
+                            edgesAndTriangles.Add(temp);
+                        }
+                    }
+                    else if (Math.Abs(GetDistancePoints(Triangles[i].vertex2, point) + GetDistancePoints(Triangles[i].vertex3, point) - GetDistancePoints(Triangles[i].vertex2, Triangles[i].vertex3)) == 0)
+                    {
+                        temp.NumTriangle = i;
+                        temp.NumEdge = 2;
 
-                    edgesAndTriangles.Add(Temp);
-                }
-                l3 = Math.Abs(GetDistancePoints(triangulation[i].vertex3, Point) + GetDistancePoints(triangulation[i].vertex1, Point) - GetDistancePoints(triangulation[i].vertex3, triangulation[i].vertex1));
-                if (l3 < 0.000001)
-                {
-                    Temp.NumTriangle = i;
-                    Temp.NumEdge = 3;
+                        if (!AddEdgesAndTriangles(edgesAndTriangles, temp))
+                        {
+                            edgesAndTriangles.Add(temp);
+                        }
+                    }
+                    else if (Math.Abs(GetDistancePoints(Triangles[i].vertex3, point) + GetDistancePoints(Triangles[i].vertex1, point) - GetDistancePoints(Triangles[i].vertex3, Triangles[i].vertex1)) == 0)
+                    {
+                        temp.NumTriangle = i;
+                        temp.NumEdge = 3;
 
-                    edgesAndTriangles.Add(Temp);
+                        if (!AddEdgesAndTriangles(edgesAndTriangles, temp))
+                        {
+                            edgesAndTriangles.Add(temp);
+                        }
+                    }
                 }
             }
-
-            if(edgesAndTriangles.Count != 0)
+    
+            return edgesAndTriangles;                  
+        }
+        private void SplitNeighborTriangles(int numEdge, int numTriangle, PointD addedPoint)
+        {
+            Triangle tempTriangle = new();
+            if (numEdge == 1)
             {
-                return edgesAndTriangles;
-            }
+                tempTriangle.vertex1 = Triangles[numTriangle].vertex1;
+                tempTriangle.vertex2 = addedPoint;
+                tempTriangle.vertex3 = Triangles[numTriangle].vertex3;
 
-            return null;
+                Triangles.Add(tempTriangle);
+
+                tempTriangle.vertex1 = addedPoint;
+                tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+                tempTriangle.vertex3 = Triangles[numTriangle].vertex3;
+
+                Triangles.Add(tempTriangle);
+            }
+            else if (numEdge == 2)
+            {
+                tempTriangle.vertex1 = Triangles[numTriangle].vertex1;
+                tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+                tempTriangle.vertex3 = addedPoint;
+
+                Triangles.Add(tempTriangle);
+
+                tempTriangle.vertex1 = addedPoint;
+                tempTriangle.vertex2 = Triangles[numTriangle].vertex3;
+                tempTriangle.vertex3 = Triangles[numTriangle].vertex1;
+
+                Triangles.Add(tempTriangle);
+            }
+            else if (numEdge == 3)
+            {
+                tempTriangle.vertex1 = Triangles[numTriangle].vertex1;
+                tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+                tempTriangle.vertex3 = addedPoint;
+
+                Triangles.Add(tempTriangle);
+
+                tempTriangle.vertex1 = addedPoint;
+                tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+                tempTriangle.vertex3 = Triangles[numTriangle].vertex3;
+
+                Triangles.Add(tempTriangle);
+            }
+        }
+        private void SplitTriangle(int numTriangle, PointD addedPoint)
+        {
+            Triangle tempTriangle = new();
+            tempTriangle.vertex1 = Triangles[numTriangle].vertex1;
+            tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+            tempTriangle.vertex3 = addedPoint;
+
+            Triangles.Add(tempTriangle);
+
+            tempTriangle.vertex1 = Triangles[numTriangle].vertex1;
+            tempTriangle.vertex2 = addedPoint;
+            tempTriangle.vertex3 = Triangles[numTriangle].vertex3;
+
+            Triangles.Add(tempTriangle);
+
+            tempTriangle.vertex1 = addedPoint;
+            tempTriangle.vertex2 = Triangles[numTriangle].vertex2;
+            tempTriangle.vertex3 = Triangles[numTriangle].vertex3;
+
+            Triangles.Add(tempTriangle);
+        }
+        private static bool AddEdgesAndTriangles(List<EdgesAndTriangle> edgesAndTriangles, EdgesAndTriangle edgesAndTriangle)
+        {
+            for (int j = 0; j < edgesAndTriangles.Count; j++)
+            {
+                if (edgesAndTriangles[j].NumTriangle == edgesAndTriangle.NumTriangle)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         private EdgesAndTriangle NeighborTriangle(int indexEdge, ref Triangle triangle)
         {
-            EdgesAndTriangle edgesAndTriangleRec = new EdgesAndTriangle();
+            EdgesAndTriangle edgesAndTriangleRec = new();
 
-            for (int i = 0; i < triangulation.Count; i++)
+            for (int i = 0; i < Triangles.Count; i++)
             {
                 if (indexEdge == 1)
                 {
-                    if ((triangle.vertex1 == triangulation[i].vertex1 && triangle.vertex2 == triangulation[i].vertex2 && triangle.vertex3 != triangulation[i].vertex3) |
-                       (triangle.vertex1 == triangulation[i].vertex2 && triangle.vertex2 == triangulation[i].vertex1 && triangle.vertex3 != triangulation[i].vertex3))
+                    if ((triangle.vertex1 == Triangles[i].vertex1 && triangle.vertex2 == Triangles[i].vertex2 && triangle.vertex3 != Triangles[i].vertex3) |
+                       (triangle.vertex1 == Triangles[i].vertex2 && triangle.vertex2 == Triangles[i].vertex1 && triangle.vertex3 != Triangles[i].vertex3))
                     {
                         //1=1
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 1;
                         
                     }
-                    else if ((triangle.vertex1 == triangulation[i].vertex2 && triangle.vertex2 == triangulation[i].vertex3 && triangle.vertex3 != triangulation[i].vertex1) ||
-                        (triangle.vertex1 == triangulation[i].vertex3 && triangle.vertex2 == triangulation[i].vertex2 && triangle.vertex3 != triangulation[i].vertex1))
+                    else if ((triangle.vertex1 == Triangles[i].vertex2 && triangle.vertex2 == Triangles[i].vertex3 && triangle.vertex3 != Triangles[i].vertex1) ||
+                        (triangle.vertex1 == Triangles[i].vertex3 && triangle.vertex2 == Triangles[i].vertex2 && triangle.vertex3 != Triangles[i].vertex1))
                     {
                         //1=2
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 2;
                     }
-                    else if ((triangle.vertex1 == triangulation[i].vertex3 && triangle.vertex2 == triangulation[i].vertex1 && triangle.vertex3 != triangulation[i].vertex2) ||
-                        (triangle.vertex1 == triangulation[i].vertex1 && triangle.vertex2 == triangulation[i].vertex3 && triangle.vertex3 != triangulation[i].vertex2))
+                    else if ((triangle.vertex1 == Triangles[i].vertex3 && triangle.vertex2 == Triangles[i].vertex1 && triangle.vertex3 != Triangles[i].vertex2) ||
+                        (triangle.vertex1 == Triangles[i].vertex1 && triangle.vertex2 == Triangles[i].vertex3 && triangle.vertex3 != Triangles[i].vertex2))
                     {
                         //1=3
                         edgesAndTriangleRec.NumTriangle = i;
@@ -893,22 +951,22 @@
                 }
                 else if (indexEdge == 2)
                 {
-                    if ((triangle.vertex2 == triangulation[i].vertex1 && triangle.vertex3 == triangulation[i].vertex2 && triangle.vertex1 != triangulation[i].vertex3) ||
-                        (triangle.vertex2 == triangulation[i].vertex2 && triangle.vertex3 == triangulation[i].vertex1 && triangle.vertex1 != triangulation[i].vertex3))
+                    if ((triangle.vertex2 == Triangles[i].vertex1 && triangle.vertex3 == Triangles[i].vertex2 && triangle.vertex1 != Triangles[i].vertex3) ||
+                        (triangle.vertex2 == Triangles[i].vertex2 && triangle.vertex3 == Triangles[i].vertex1 && triangle.vertex1 != Triangles[i].vertex3))
                     {
                         //2=1
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 1;
                     }
-                    else if ((triangle.vertex2 == triangulation[i].vertex2 && triangle.vertex3 == triangulation[i].vertex3 && triangle.vertex1 != triangulation[i].vertex1) ||
-                        (triangle.vertex2 == triangulation[i].vertex3 && triangle.vertex3 == triangulation[i].vertex2 && triangle.vertex1 != triangulation[i].vertex1))
+                    else if ((triangle.vertex2 == Triangles[i].vertex2 && triangle.vertex3 == Triangles[i].vertex3 && triangle.vertex1 != Triangles[i].vertex1) ||
+                        (triangle.vertex2 == Triangles[i].vertex3 && triangle.vertex3 == Triangles[i].vertex2 && triangle.vertex1 != Triangles[i].vertex1))
                     {
                         //2=2
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 2;
                     }
-                    else if ((triangle.vertex2 == triangulation[i].vertex3 && triangle.vertex3 == triangulation[i].vertex1 && triangle.vertex1 != triangulation[i].vertex2) ||
-                       (triangle.vertex2 == triangulation[i].vertex1 && triangle.vertex3 == triangulation[i].vertex3 && triangle.vertex1 != triangulation[i].vertex2))
+                    else if ((triangle.vertex2 == Triangles[i].vertex3 && triangle.vertex3 == Triangles[i].vertex1 && triangle.vertex1 != Triangles[i].vertex2) ||
+                       (triangle.vertex2 == Triangles[i].vertex1 && triangle.vertex3 == Triangles[i].vertex3 && triangle.vertex1 != Triangles[i].vertex2))
                     {
                         //2=3
                         edgesAndTriangleRec.NumTriangle = i;
@@ -917,22 +975,22 @@
                 }
                 else if (indexEdge == 3)
                 {
-                    if ((triangle.vertex3 == triangulation[i].vertex1 && triangle.vertex1 == triangulation[i].vertex2 && triangle.vertex2 != triangulation[i].vertex3) ||
-                        (triangle.vertex3 == triangulation[i].vertex2 && triangle.vertex1 == triangulation[i].vertex1 && triangle.vertex2 != triangulation[i].vertex3))
+                    if ((triangle.vertex3 == Triangles[i].vertex1 && triangle.vertex1 == Triangles[i].vertex2 && triangle.vertex2 != Triangles[i].vertex3) ||
+                        (triangle.vertex3 == Triangles[i].vertex2 && triangle.vertex1 == Triangles[i].vertex1 && triangle.vertex2 != Triangles[i].vertex3))
                     {
                         //3=1
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 1;
                     }
-                    else if ((triangle.vertex3 == triangulation[i].vertex2 && triangle.vertex1 == triangulation[i].vertex3 && triangle.vertex2 != triangulation[i].vertex1) ||
-                       (triangle.vertex3 == triangulation[i].vertex3 && triangle.vertex1 == triangulation[i].vertex2 && triangle.vertex2 != triangulation[i].vertex1))
+                    else if ((triangle.vertex3 == Triangles[i].vertex2 && triangle.vertex1 == Triangles[i].vertex3 && triangle.vertex2 != Triangles[i].vertex1) ||
+                       (triangle.vertex3 == Triangles[i].vertex3 && triangle.vertex1 == Triangles[i].vertex2 && triangle.vertex2 != Triangles[i].vertex1))
                     {
                         //3=2
                         edgesAndTriangleRec.NumTriangle = i;
                         edgesAndTriangleRec.NumEdge = 2;
                     }
-                    else if ((triangle.vertex3 == triangulation[i].vertex3 && triangle.vertex1 == triangulation[i].vertex1 && triangle.vertex2 != triangulation[i].vertex2) ||
-                       (triangle.vertex3 == triangulation[i].vertex1 && triangle.vertex1 == triangulation[i].vertex3 && triangle.vertex2 != triangulation[i].vertex2))
+                    else if ((triangle.vertex3 == Triangles[i].vertex3 && triangle.vertex1 == Triangles[i].vertex1 && triangle.vertex2 != Triangles[i].vertex2) ||
+                       (triangle.vertex3 == Triangles[i].vertex1 && triangle.vertex1 == Triangles[i].vertex3 && triangle.vertex2 != Triangles[i].vertex2))
                     {
                         //3=3
                         edgesAndTriangleRec.NumTriangle = i;
@@ -948,15 +1006,15 @@
         /// </summary>
         /// <param name="addPoint"></param>
         /// <returns></returns>
-        private bool PointBeyondArea(PointF addPoint)
+        private bool PointBeyondArea(PointD addPoint)
         {
             List<EdgesAndTriangle> edgesAndTriangle = PointOnSideTriangle(addPoint);
 
-            if (edgesAndTriangle == null)
+            if (edgesAndTriangle.Count == 0)
             {
-                for (int i = 0; i < triangulation.Count; i++)
+                for (int i = 0; i < Triangles.Count; i++)
                 {
-                    if (!PointOnTriangle(triangulation[i], addPoint))
+                    if (!PointOnTriangle(Triangles[i], addPoint))
                     {
                         return true;
                     }
@@ -971,27 +1029,26 @@
         /// <param name="triangle"></param>
         private void SplitHeightTriangle(Triangle triangle)
         {
-            Triangle tempTriangle = new Triangle();
-            PointF newPoint = newVertexTriangle(triangle);
+            Triangle tempTriangle = new();
+            PointD newPoint = NewVertexTriangle(triangle);
 
             int numSide = RightAngleTriangle(triangle);
             
-
             if (numSide == 1)
             {
                 tempTriangle.vertex1 = triangle.vertex1;
                 tempTriangle.vertex2 = newPoint;
                 tempTriangle.vertex3 = triangle.vertex3;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
                 tempTriangle.vertex1 = newPoint;
                 tempTriangle.vertex2 = triangle.vertex2;
                 tempTriangle.vertex3 = triangle.vertex3;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
-                triangulation.Remove(triangle);
+                Triangles.Remove(triangle);
             }
             else if (numSide == 2)
             {
@@ -999,15 +1056,15 @@
                 tempTriangle.vertex2 = triangle.vertex2;
                 tempTriangle.vertex3 = newPoint;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
                 tempTriangle.vertex1 = triangle.vertex1;
                 tempTriangle.vertex2 = newPoint;
                 tempTriangle.vertex3 = triangle.vertex3;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
-                triangulation.Remove(triangle);
+                Triangles.Remove(triangle);
             }
             else if (numSide == 3)
             {
@@ -1015,22 +1072,21 @@
                 tempTriangle.vertex2 = triangle.vertex2;
                 tempTriangle.vertex3 = newPoint;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
                 tempTriangle.vertex1 = newPoint;
                 tempTriangle.vertex2 = triangle.vertex2;
                 tempTriangle.vertex3 = triangle.vertex3;
 
-                triangulation.Add(tempTriangle);
+                Triangles.Add(tempTriangle);
 
-                triangulation.Remove(triangle);
+                Triangles.Remove(triangle);
             }
         }
-        private int RightAngleTriangle(Triangle triangle)
+        private static int RightAngleTriangle(Triangle triangle)
         {
-            PointF[] vector = new PointF[2];
+            PointD[] vector;
             double firstAngle = 0, secondAngle = 0, thirdAngle = 0; // 1 и 3 / 1 и 2/  2 и 3
-            int side = -1;
 
             for (int i = 1; i < 4; i++)
             {
@@ -1049,22 +1105,12 @@
                     thirdAngle = GetAngleVectors(vector[0], vector[1]);
                 }
             }
-
-            /*  if(firstAngle <= 35 || secondAngle <= 35 || thirdAngle <= 35)
-              {
-                  side = (firstAngle >= secondAngle) ? ((firstAngle >= thirdAngle) ? (2) : (1)) : ((secondAngle >= thirdAngle) ? (3) : (1));
-              }*/
-
-            if (firstAngle > 120 || secondAngle > 120 || thirdAngle > 120)
-            {
-               
-            }
-            side = (firstAngle >= secondAngle) ? ((firstAngle >= thirdAngle) ? (2) : (1)) : ((secondAngle >= thirdAngle) ? (3) : (1));
-            return side;
+            
+            return (firstAngle >= secondAngle) ? ((firstAngle >= thirdAngle) ? (2) : (1)) : ((secondAngle >= thirdAngle) ? (3) : (1));
         }
-        private PointF[] GetVectorSideTriangle(Triangle triangle, int sideIndex)
+        private static  PointD[] GetVectorSideTriangle(Triangle triangle, int sideIndex)
         {
-            PointF[] vector = new PointF[2];
+            PointD[] vector = new PointD[2];
 
             if (sideIndex == 1)
             {
@@ -1092,15 +1138,15 @@
             }
             return vector;
         }
-        private PointF newVertexTriangle(Triangle triangle)
+        private static PointD NewVertexTriangle(Triangle triangle)
         {
             double cat;
           
             int side = RightAngleTriangle(triangle);
             double h = 2 * GetSquareTriangle(triangle) / GetSideLenght(side, triangle);
 
-            PointF vec = new PointF();
-            PointF newVertex = new PointF();
+            PointD vec = new();
+            PointD newVertex = new();
 
             if (side == 1)
             {
@@ -1144,7 +1190,7 @@
         /// <param name="num"></param>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private double GetSideLenght(int num, Triangle triangle)
+        private static double GetSideLenght(int num, Triangle triangle)
         {
             if (num == 1)
             {
@@ -1169,15 +1215,15 @@
         /// <param name="thirdIndex"></param>
         /// <param name="Points"></param>
         /// <returns></returns>
-        private PointF[] GetCoordinatesVectors(int firstIndex, int secondIndex, int thirdIndex, ref List<PointF> Points)
+        private static PointD[] GetCoordinatesVectors(int firstIndex, int secondIndex, int thirdIndex, ref List<PointD> points)
         {
-            PointF[] vector = new PointF[2];
+            PointD[] vector = new PointD[2];
 
-            vector[0].X = Points[firstIndex].X - Points[secondIndex].X;
-            vector[0].Y = Points[firstIndex].Y - Points[secondIndex].Y;
+            vector[0].X = points[firstIndex].X - points[secondIndex].X;
+            vector[0].Y = points[firstIndex].Y - points[secondIndex].Y;
 
-            vector[1].X = Points[thirdIndex].X - Points[secondIndex].X;
-            vector[1].Y = Points[thirdIndex].Y - Points[secondIndex].Y;
+            vector[1].X = points[thirdIndex].X - points[secondIndex].X;
+            vector[1].Y = points[thirdIndex].Y - points[secondIndex].Y;
 
             return vector;
         }
@@ -1187,7 +1233,7 @@
         /// <param name="vector1"></param>
         /// <param name="vector2"></param>
         /// <returns></returns>
-        private double GetAngleVectors(PointF firstVector, PointF secondVector)
+        private static  double GetAngleVectors(PointD firstVector, PointD secondVector)
         {
             return ((Math.Acos((firstVector.X * secondVector.X + firstVector.Y * secondVector.Y) /
                         (Math.Sqrt((firstVector.X * firstVector.X + firstVector.Y * firstVector.Y) *
@@ -1202,21 +1248,21 @@
         {
             double minEdge = 1000;
 
-            for (int i = 1; i < triangulation.Count; i++)
+            for (int i = 1; i < Triangles.Count; i++)
             {
-                if (GetDistancePoints(triangulation[i].vertex1, triangulation[i].vertex2) < minEdge)
+                if (GetDistancePoints(Triangles[i].vertex1, Triangles[i].vertex2) < minEdge)
                 {
-                    minEdge = GetDistancePoints(triangulation[i].vertex1, triangulation[i].vertex2);
+                    minEdge = GetDistancePoints(Triangles[i].vertex1, Triangles[i].vertex2);
                 }
 
-                if (GetDistancePoints(triangulation[i].vertex2, triangulation[i].vertex3) < minEdge)
+                if (GetDistancePoints(Triangles[i].vertex2, Triangles[i].vertex3) < minEdge)
                 {
-                    minEdge = GetDistancePoints(triangulation[i].vertex2, triangulation[i].vertex3);
+                    minEdge = GetDistancePoints(Triangles[i].vertex2, Triangles[i].vertex3);
                 }
 
-                if (GetDistancePoints(triangulation[i].vertex3, triangulation[i].vertex1) < minEdge)
+                if (GetDistancePoints(Triangles[i].vertex3, Triangles[i].vertex1) < minEdge)
                 {
-                    minEdge = GetDistancePoints(triangulation[i].vertex3, triangulation[i].vertex1);
+                    minEdge = GetDistancePoints(Triangles[i].vertex3, Triangles[i].vertex1);
                 }
             }
 
@@ -1227,7 +1273,7 @@
         /// </summary>
         /// <param name="XOY"></param>
         /// <returns></returns>
-        private double ShortestEdgeTriagnle(Triangle triangle)
+        private static double ShortestEdgeTriagnle(Triangle triangle)
         {
             double ShortestEdge = 1000;
 
@@ -1254,7 +1300,7 @@
         /// <param name="firstPoint"></param>
         /// <param name="secondPoint"></param>
         /// <returns></returns>
-        public double GetDistancePoints(PointF firstPoint, PointF secondPoint)
+        public static double GetDistancePoints(PointD firstPoint, PointD secondPoint)
         {
             return Math.Sqrt((firstPoint.X - secondPoint.X) * (firstPoint.X - secondPoint.X) + (firstPoint.Y - secondPoint.Y) * (firstPoint.Y - secondPoint.Y));
         }
@@ -1263,7 +1309,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private double GetCircumRadius(Triangle triangle)
+        private static double GetCircumRadius(Triangle triangle)
         {
             return (GetProductSidesTriangle(triangle) / (4 * GetSquareTriangle(triangle)));
         }
@@ -1272,7 +1318,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        public double GetSquareTriangle(Triangle triangle)
+        public static double GetSquareTriangle(Triangle triangle)
         {
             return Math.Abs((triangle.vertex1.X * triangle.vertex2.Y + triangle.vertex2.X * triangle.vertex3.Y + triangle.vertex3.X * triangle.vertex1.Y) -
                 (triangle.vertex2.X * triangle.vertex1.Y + triangle.vertex3.X * triangle.vertex2.Y + triangle.vertex1.X * triangle.vertex3.Y)) / 2;            
@@ -1282,7 +1328,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private double GetProductSidesTriangle(Triangle triangle)
+        private static  double GetProductSidesTriangle(Triangle triangle)
         {
             double[] side = new double[3];
 
@@ -1297,7 +1343,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private double GetCircumRadiusShortestEdgeRatio(Triangle triangle)
+        private static double GetCircumRadiusShortestEdgeRatio(Triangle triangle)
         {
             return (GetCircumRadius(triangle) / ShortestEdgeTriagnle(triangle));
         }
@@ -1306,7 +1352,7 @@
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private double GetSumtSidesTriangle(Triangle triangle)
+        private static double GetSumtSidesTriangle(Triangle triangle)
         {
             double[] side = new double[3];
 
@@ -1317,31 +1363,15 @@
             return side[0] + side[1] + side[2];
         }
         /// <summary>
-        /// Возвращает true, если треугольники одинаковы или false, если нет.
-        /// </summary>
-        /// <param name="firsstTriangle"></param>
-        /// <param name="secondTriangle"></param>
-        /// <returns></returns>
-        private bool EqualTriangle(Triangle firsstTriangle, Triangle secondTriangle)
-        {
-            if ((firsstTriangle.vertex1 == secondTriangle.vertex1 || firsstTriangle.vertex1 == secondTriangle.vertex2 || firsstTriangle.vertex1 == secondTriangle.vertex3) &&
-               (firsstTriangle.vertex2 == secondTriangle.vertex1 || firsstTriangle.vertex2 == secondTriangle.vertex2 || firsstTriangle.vertex2 == secondTriangle.vertex3) &&
-               (firsstTriangle.vertex3 == secondTriangle.vertex1 || firsstTriangle.vertex3 == secondTriangle.vertex2 || firsstTriangle.vertex3 == secondTriangle.vertex3))
-            {
-                return true;
-            }
-            return false;
-        }
-        /// <summary>
         /// Возвращает true, если диаметральная окружность треугольника пересекает ребро, заданное двумя точками и false, если нет.
         /// </summary>
         /// <param name="triangle"></param>
         /// <param name="startPoint"></param>
         /// <param name="endPoint"></param>
         /// <returns></returns>
-        private bool PointIsDiametralCircle(Triangle triangle, PointF startPoint, PointF endPoint)
+        private static bool PointIsDiametralCircle(Triangle triangle, PointD startPoint, PointD endPoint)
         {
-            PointF midPoint = new PointF();
+            PointD midPoint = new();
 
             midPoint.X = (startPoint.X + endPoint.X) / 2;
             midPoint.Y = (startPoint.Y + endPoint.Y) / 2;
@@ -1350,19 +1380,16 @@
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;          
         }
         /// <summary>
         /// Возврщает центр описанной окружности треугольника.
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private PointF GetCenterPointCircleTriangle(Triangle triangle)
+        private static PointD GetCenterPointCircleTriangle(Triangle triangle)
         {
-            PointF centerCirclePoint = new PointF();
+            PointD centerCirclePoint = new();
 
             centerCirclePoint.X = -(triangle.vertex1.Y * (triangle.vertex2.X * triangle.vertex2.X + triangle.vertex2.Y * triangle.vertex2.Y - triangle.vertex3.X * triangle.vertex3.X - triangle.vertex3.Y * triangle.vertex3.Y) +
                 triangle.vertex2.Y * (triangle.vertex3.X * triangle.vertex3.X + triangle.vertex3.Y * triangle.vertex3.Y - triangle.vertex1.X * triangle.vertex1.X - triangle.vertex1.Y * triangle.vertex1.Y) +
@@ -1382,9 +1409,9 @@
         /// <param name="Triangle"></param>
         /// <param name="Point"></param>
         /// <returns></returns>
-        private bool PointOnTriangle(Triangle triangle, PointF point)
+        private static bool PointOnTriangle(Triangle triangle, PointD point)
         {
-            float[] s = new float[3];
+            double[] s = new double[3];
 
             s[0] = (triangle.vertex1.X - point.X) * (triangle.vertex2.Y - triangle.vertex1.Y) - (triangle.vertex2.X - triangle.vertex1.X) * (triangle.vertex1.Y - point.Y);
             s[1] = (triangle.vertex2.X - point.X) * (triangle.vertex3.Y - triangle.vertex2.Y) - (triangle.vertex3.X - triangle.vertex2.X) * (triangle.vertex2.Y - point.Y);
@@ -1398,7 +1425,7 @@
         /// <param name="triangle"></param>
         /// <param name="point"></param>
         /// <returns></returns>
-        private int NumberEdgeTriangle(Triangle triangle, PointF point)
+        private static int NumberEdgeTriangle(Triangle triangle, PointD point)
         {
             if (point == triangle.vertex1)
             {
@@ -1412,10 +1439,7 @@
             {
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+            return -1;            
         }
         /// <summary>
         /// Возврщает true, если какая либо из вершин треугольника лежит внутри "соседнего" треугольника.
@@ -1429,21 +1453,21 @@
 
             if (neighborTriangle.NumEdge == 1)
             {
-                if (GetDistancePoints(triangulation[neighborTriangle.NumTriangle].vertex3, GetCenterPointCircleTriangle(triangle)) <= radius)
+                if (GetDistancePoints(Triangles[neighborTriangle.NumTriangle].vertex3, GetCenterPointCircleTriangle(triangle)) <= radius)
                 {
                     return true;
                 }
             }
             else if (neighborTriangle.NumEdge == 2)
             {
-                if (GetDistancePoints(triangulation[neighborTriangle.NumTriangle].vertex1, GetCenterPointCircleTriangle(triangle)) <= radius)
+                if (GetDistancePoints(Triangles[neighborTriangle.NumTriangle].vertex1, GetCenterPointCircleTriangle(triangle)) <= radius)
                 {
                     return true;
                 }
             }
             else if (neighborTriangle.NumEdge == 3)
             {
-                if (GetDistancePoints(triangulation[neighborTriangle.NumTriangle].vertex2, GetCenterPointCircleTriangle(triangle)) <= radius)
+                if (GetDistancePoints(Triangles[neighborTriangle.NumTriangle].vertex2, GetCenterPointCircleTriangle(triangle)) <= radius)
                 {
                     return true;
                 }
@@ -1457,7 +1481,7 @@
         /// <param name="point"></param>
         /// <param name="points"></param>
         /// <returns></returns>
-        private bool ExistNode(PointF point, ref List<PointF> points)
+        private static bool ExistNode(PointD point, ref List<PointD> points)
         {
             for (int i = 0; i < points.Count; i++)
             {
@@ -1468,12 +1492,12 @@
             }
             return false;
         }
-        private void IterationNumbering(List<PointF> points)
+        private int IterationNumbering(List<PointD> points, int  countNodes)
         {
-            float minX = 1000;
-            Nodes tempNode = new Nodes();
-            List<int> indexPoint = new List<int>();
-            List<PointF> leftPoints = new List<PointF>();
+            double minX = 1000;
+            Nodes tempNode = new();
+            List<int> indexPoint = new();
+            List<PointD> leftPoints = new();
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -1500,7 +1524,7 @@
                 tempNode.NumNode = countNodes;
                 countNodes++;
 
-                nodes.Add(tempNode);
+                Nodes.Add(tempNode);
             }
 
             foreach (int index in indexPoint.OrderByDescending(n => n))
@@ -1510,6 +1534,8 @@
 
             leftPoints.Clear();
             indexPoint.Clear();
+
+            return countNodes;
         }
         /// <summary>
         /// Функция сравнения двух точек по координате у
@@ -1517,46 +1543,43 @@
         /// <param name="firstPoint"></param>
         /// <param name="secondPoint"></param>
         /// <returns></returns>
-        private int ComparisonPointByCoordinatesY(PointF firstPoint, PointF secondPoint)
+        private int ComparisonPointByCoordinatesY(PointD firstPoint, PointD secondPoint)
         {
             if (firstPoint.Y <= secondPoint.Y)
             {
                 return -1;
             }
-            else
-            {
-                return 1;
-            }
+
+            return 1;          
         }
         /// <summary>
         /// Сопоставление вершин треугольника и узлов сетки
         /// </summary>
         private void EqualityVertexAndNodes()
         {
-            int numNode;
-            Triangle tempTriangle = new Triangle();
+            Triangle tempTriangle = new();
 
-            for (int i = 0; i < triangulation.Count; i++)
+            for (int i = 0; i < Triangles.Count; i++)
             {
-                if (NodeIsVertex(triangulation[i].vertex1, out numNode))
+                if (NumberNodeIsVertex(Triangles[i].vertex1) != -1)
                 {
-                    tempTriangle = triangulation[i];
-                    tempTriangle.vertex1NumNodes = numNode;
-                    triangulation[i] = tempTriangle;
+                    tempTriangle = Triangles[i];
+                    tempTriangle.vertex1NumNodes = NumberNodeIsVertex(Triangles[i].vertex1);
+                    Triangles[i] = tempTriangle;
                 }
 
-                if (NodeIsVertex(triangulation[i].vertex2, out numNode))
+                if (NumberNodeIsVertex(Triangles[i].vertex2) != -1)
                 {
-                    tempTriangle = triangulation[i];
-                    tempTriangle.vertex2NumNodes = numNode;
-                    triangulation[i] = tempTriangle;
+                    tempTriangle = Triangles[i];
+                    tempTriangle.vertex2NumNodes = NumberNodeIsVertex(Triangles[i].vertex2);
+                    Triangles[i] = tempTriangle;
                 }
 
-                if (NodeIsVertex(triangulation[i].vertex3, out numNode))
+                if (NumberNodeIsVertex(Triangles[i].vertex3) != -1)
                 {
-                    tempTriangle = triangulation[i];
-                    tempTriangle.vertex3NumNodes = numNode;
-                    triangulation[i] = tempTriangle;
+                    tempTriangle = Triangles[i];
+                    tempTriangle.vertex3NumNodes = NumberNodeIsVertex(Triangles[i].vertex3);
+                    Triangles[i] = tempTriangle;
                 }
             }
         }
@@ -1566,19 +1589,19 @@
         /// <param name="vertex"></param>
         /// <param name="numberNode"></param>
         /// <returns></returns>
-        private bool NodeIsVertex(PointF vertex, out int numberNode)
+        private int NumberNodeIsVertex(PointD vertex)
         {
-            numberNode = -1;
+            int numberNode = -1;
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                if (vertex == nodes[i].Node)
+                if (vertex == Nodes[i].Node)
                 {
-                    numberNode = nodes[i].NumNode;
-                    return true;
+                    numberNode = Nodes[i].NumNode;
+                    break;
                 }
             }
-            return false;
+            return numberNode;
         }
         /// <summary>
         /// Возвращает true, если в образованном тремя точками треугольнике, угол при основании больше 90 градусов
@@ -1587,9 +1610,9 @@
         /// <param name="secondPoint"></param>
         /// <param name="thirdPoint"></param>
         /// <returns></returns>
-        public bool ObtuseAngle(PointF firstPoint, PointF secondPoint, PointF thirdPoint)
+        public static bool ObtuseAngle(PointD firstPoint, PointD secondPoint, PointD thirdPoint)
         {
-            PointF[] vector = GetVectorTriangle(firstPoint, secondPoint, thirdPoint);
+            PointD[] vector = GetVectorTriangle(firstPoint, secondPoint, thirdPoint);
 
             if (GetAngleVectors(vector[0], vector[1]) > 90)
             {
@@ -1606,9 +1629,9 @@
             }
             return false;
         }
-        private PointF[] GetVectorTriangle(PointF firstPoint, PointF secondPoint, PointF thirdPoint)
+        private static PointD[] GetVectorTriangle(PointD firstPoint, PointD secondPoint, PointD thirdPoint)
         {
-            PointF[] vector = new PointF[2];
+            PointD[] vector = new PointD[2];
 
             vector[0].X = secondPoint.X - firstPoint.X;
             vector[0].Y = secondPoint.Y - firstPoint.Y;
@@ -1625,25 +1648,23 @@
         /// <param name="secondPoint"></param>
         /// <param name="thirdPoint"></param>
         /// <returns></returns>
-        public double MinDistanceToPoint(PointF firstPoint, PointF secondPoint, PointF thirdPoint)
+        public static double MinDistanceToPoint(PointD firstPoint, PointD secondPoint, PointD thirdPoint)
         {
             if (Math.Sqrt((thirdPoint.X - firstPoint.X) * (thirdPoint.X - firstPoint.X) + (thirdPoint.Y - firstPoint.Y) * (thirdPoint.Y - firstPoint.Y)) < Math.Sqrt((thirdPoint.X - secondPoint.X) * (thirdPoint.X - secondPoint.X) + (thirdPoint.Y - secondPoint.Y) * (thirdPoint.Y - secondPoint.Y)))
             {
                 return Math.Sqrt((thirdPoint.X - firstPoint.X) * (thirdPoint.X - firstPoint.X) + (thirdPoint.Y - firstPoint.Y) * (thirdPoint.Y - firstPoint.Y));
             }
-            else
-            {
-                return Math.Sqrt((thirdPoint.X - secondPoint.X) * (thirdPoint.X - secondPoint.X) + (thirdPoint.Y - secondPoint.Y) * (thirdPoint.Y - secondPoint.Y));
-            }
+
+            return Math.Sqrt((thirdPoint.X - secondPoint.X) * (thirdPoint.X - secondPoint.X) + (thirdPoint.Y - secondPoint.Y) * (thirdPoint.Y - secondPoint.Y));
         }
         /// <summary>
         /// Возвращает вершину наибольшего угла треугольника 
         /// </summary>
         /// <param name="triangle"></param>
         /// <returns></returns>
-        private PointF VertexMaxAngle(Triangle triangle)
+        private static PointD VertexMaxAngle(Triangle triangle)
         {
-            PointF[] vector = new PointF[2];
+            PointD[] vector;
             double firstAngle = 0, secondAngle = 0, thirdAngle = 0; // 1 и 3 / 1 и 2/  2 и 3
 
             for (int i = 1; i < 4; i++)

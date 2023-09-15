@@ -8,34 +8,34 @@
         /// <summary>
         /// Начальные точки сетки
         /// </summary>
-        public PointF[] points { get; set; }      
-        public Area(PointF[] points) => this.points = points;
+        public PointD[] Points { get; private set; }      
+        public Area(PointD[] points) => Points = points;
 
         /// <summary>
         /// Выполняется сдвиг области в I координатную четверть.
         /// </summary>
         public void ShiftingPointsArea()
         {
-            PointF Shift = new PointF();
+            PointD Shift = new();
             Shift.X = 0; Shift.Y = 0;
 
-            for (int i = 0; i < this.points.Length; i++)
+            for (int i = 0; i < Points.Length; i++)
             {
-                if (points[i].X <= Shift.X)
+                if (Points[i].X <= Shift.X)
                 {
-                    Shift.X = points[i].X;
+                    Shift.X = Points[i].X;
                 }
 
-                if (points[i].Y <= Shift.Y)
+                if (Points[i].Y <= Shift.Y)
                 {
-                    Shift.Y = points[i].Y;
+                    Shift.Y = Points[i].Y;
                 }
             }
 
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < Points.Length; i++)
             {
-                points[i].X += Math.Abs(Shift.X);
-                points[i].Y += Math.Abs(Shift.Y);
+                Points[i].X += Math.Abs(Shift.X);
+                Points[i].Y += Math.Abs(Shift.Y);
             }
         }
     }

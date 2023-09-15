@@ -30,16 +30,7 @@ namespace MKE
         /// <summary>
         /// Окружающая температура с каждой из сторон области
         /// </summary>
-        private double[] t_inf { get; set; }
-        /// <summary>
-        /// Список структур треугольников триангуляции Делоне
-        /// </summary>
-        private List<Triangle> triangles { get; set; }
-        /// <summary>
-        /// Узлы сетки
-        /// </summary>
-        /// 
-        private List<Nodes> nodes { get; set; }
+        private double[] t_inf { get; set; }      
         /// <summary>
         /// Глобальный вектор-столбец нагрузки
         /// </summary>
@@ -51,15 +42,22 @@ namespace MKE
         /// <summary>
         /// Искомый столбец температур
         /// </summary>
-        public double[] result { get; set; }
+        public double[] Result { get; private set; }
         /// <summary>
         /// Изначальные точки области
         /// </summary>
-        private PointF[] points { get; set; }
+        private PointD[] Points { get; set; }
+        /// <summary>
+        /// Список структур треугольников триангуляции Делоне
+        /// </summary>
+        private List<Triangle> Triangles { get; set; }
+        /// <summary>
+        /// Узлы сетки
+        /// </summary>
+        /// 
+        private List<Nodes> Nodes { get; set; }
 
-        private Triangulation triang = new Triangulation();
-
-        public Solution_Equation(double Kxx, double Kyy, double Q, double[] h, double[] q, double[] t_inf, List<Triangle> triangulation, List<Nodes> nodes, PointF[] points) 
+        public Solution_Equation(double Kxx, double Kyy, double Q, double[] h, double[] q, double[] t_inf, List<Triangle> triangulation, List<Nodes> nodes, PointD[] points) 
         { 
             this.Kxx = Kxx;
             this.Kyy = Kyy;
@@ -67,41 +65,41 @@ namespace MKE
             this.h = h;
             this.q = q;
             this.t_inf = t_inf;
-            this.nodes = nodes;
-            this.points = points;
-            triangles = triangulation;
+            Nodes = nodes;
+            Points = points;
+            Triangles = triangulation;
             
-            F = new double[nodes.Count];
-            K = new double[nodes.Count, nodes.Count];
+            F = new double[Nodes.Count];
+            K = new double[Nodes.Count, Nodes.Count];
         }
-
+        
         /// <summary>
         /// Вычисление глобальных матриц К и F
         /// </summary>
         public void FindGlobalMatrix()
-        {           
-            for (int i = 0; i < triangles.Count; i++)
+        {
+            for (int i = 0; i < Triangles.Count; i++)
             {
-                double squareTriangle = triang.GetSquareTriangle(triangles[i]);
+                double squareTriangle = Triangulation.GetSquareTriangle(Triangles[i]);
 
-                double[,] firstIntegralK_e = new double[3, 3];
-                double[,] secondIntegralK_e = new double[3, 3];
-                double[,] matrixK_e = new double[3, 3];
+                double[,] firstIntegralK_e;
+                double[,] secondIntegralK_e;
+                double[,] matrixK_e;
 
-                double[] firstIntegralF_e = new double[3];
-                double[] secondIntegralF_e = new double[3];
-                double[] matrixF_e = new double[3];
+                double[] firstIntegralF_e;
+                double[] secondIntegralF_e;
+                double[] matrixF_e;
 
-                firstIntegralK_e = FindFirstIntegralK_e(triangles[i], squareTriangle);
-                secondIntegralK_e = FindSecondIntegralK_e(triangles[i]);
+                firstIntegralK_e = FindFirstIntegralK_e(Triangles[i], squareTriangle);
+                secondIntegralK_e = FindSecondIntegralK_e(Triangles[i]);
                 matrixK_e = CompletionMatrixK_e(firstIntegralK_e, secondIntegralK_e);
 
                 firstIntegralF_e = FindFirstIntegralF_e(squareTriangle);
-                secondIntegralF_e = FindSecondIntegralF_e(triangles[i]);
+                secondIntegralF_e = FindSecondIntegralF_e(Triangles[i]);
                 matrixF_e = CompletionMatrixF_e(firstIntegralF_e, secondIntegralF_e);
 
-                CompletionMatrixF(triangles[i], matrixF_e);
-                CompletionMatrixK(triangles[i], matrixK_e);
+                CompletionMatrixF(Triangles[i], matrixF_e);
+                CompletionMatrixK(Triangles[i], matrixK_e);
             }
         }
         /// <summary>
@@ -109,25 +107,25 @@ namespace MKE
         /// </summary>
         public void FindColumnTemperature()
         {
-            SparseMatrix matrixK = new SparseMatrix(nodes.Count, nodes.Count);
-            double[] rightSide = new double[nodes.Count];
+            SparseMatrix matrixK = new(Nodes.Count, Nodes.Count);
+            double[] rightSide = new double[Nodes.Count];
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
                 rightSide[i] = F[i];
 
-                for (int j = 0; j < nodes.Count; j++)
+                for (int j = 0; j < Nodes.Count; j++)
                 {
                     matrixK[i, j] = K[i, j];
                 }
             }
 
             var columnTemperature = matrixK.Solve(DenseVector.Build.DenseOfArray(rightSide)).ToArray();         
-            result = new double[columnTemperature.Length];
+            Result = new double[columnTemperature.Length];
 
             for (int i = 0; i < columnTemperature.Length; i++)
             {
-                result[i] = columnTemperature[i];
+                Result[i] = columnTemperature[i];
             }
         }
         /// <summary>
@@ -178,9 +176,9 @@ namespace MKE
             numberBorder[1] = SideTriangleOnBorder(triangle.vertex2, triangle.vertex3);
             numberBorder[2] = SideTriangleOnBorder(triangle.vertex3, triangle.vertex1);
 
-            distanceSide[0] = triang.GetDistancePoints(triangle.vertex1, triangle.vertex2);
-            distanceSide[1] = triang.GetDistancePoints(triangle.vertex2, triangle.vertex3);
-            distanceSide[2] = triang.GetDistancePoints(triangle.vertex3, triangle.vertex1);
+            distanceSide[0] = Triangulation.GetDistancePoints(triangle.vertex1, triangle.vertex2);
+            distanceSide[1] = Triangulation.GetDistancePoints(triangle.vertex2, triangle.vertex3);
+            distanceSide[2] = Triangulation.GetDistancePoints(triangle.vertex3, triangle.vertex1);
 
 
             for (int i = 0; i < numberBorder.Length; i++)
@@ -261,7 +259,7 @@ namespace MKE
         /// <param name="firstI"></param>
         /// <param name="secondI"></param>
         /// <returns></returns>
-        private double[,] CompletionMatrixK_e(double[,]  firstI, double[,] secondI)
+        private static double[,] CompletionMatrixK_e(double[,]  firstI, double[,] secondI)
         {
             double[,] matrixK_e = new double[3, 3];
 
@@ -306,9 +304,9 @@ namespace MKE
             numberBorder[1] = SideTriangleOnBorder(triangle.vertex2, triangle.vertex3);
             numberBorder[2] = SideTriangleOnBorder(triangle.vertex3, triangle.vertex1);
 
-            distanceSide[0] = triang.GetDistancePoints(triangle.vertex1, triangle.vertex2);
-            distanceSide[1] = triang.GetDistancePoints(triangle.vertex2, triangle.vertex3);
-            distanceSide[2] = triang.GetDistancePoints(triangle.vertex3, triangle.vertex1);
+            distanceSide[0] = Triangulation.GetDistancePoints(triangle.vertex1, triangle.vertex2);
+            distanceSide[1] = Triangulation.GetDistancePoints(triangle.vertex2, triangle.vertex3);
+            distanceSide[2] = Triangulation.GetDistancePoints(triangle.vertex3, triangle.vertex1);
 
             for (int i = 0; i < numberBorder.Length; i++)
             {
@@ -367,7 +365,7 @@ namespace MKE
         /// <param name="firstIf"></param>
         /// <param name="secondIf"></param>
         /// <returns></returns>
-        private double[] CompletionMatrixF_e(double[] firstIf, double[] secondIf)
+        private static double[] CompletionMatrixF_e(double[] firstIf, double[] secondIf)
         {
             double[] matrixF_e = new double[3];
 
@@ -385,7 +383,7 @@ namespace MKE
         /// <param name="matrixF_e"></param>
         private void CompletionMatrixF(Triangle triangle, double[] matrixF_e)
         {
-            for(int i = 0; i < nodes.Count; i++)
+            for(int i = 0; i < Nodes.Count; i++)
             {
                 if(i == (triangle.vertex1NumNodes - 1))
                 {
@@ -410,9 +408,9 @@ namespace MKE
         /// <param name="matrixK_e"></param>
         private void CompletionMatrixK(Triangle triangle, double[,] matrixK_e)
         {
-            for(int i = 0; i < nodes.Count;i++)
+            for(int i = 0; i < Nodes.Count;i++)
             {
-                for (int j = 0; j < nodes.Count; j++)
+                for (int j = 0; j < Nodes.Count; j++)
                 {
                     //1
                     if(i == (triangle.vertex1NumNodes - 1) && j == (triangle.vertex1NumNodes - 1))
@@ -470,23 +468,22 @@ namespace MKE
         /// <param name="firstVertex"></param>
         /// <param name="secondVertex"></param>
         /// <returns></returns>
-        private int SideTriangleOnBorder(PointF firstVertex, PointF secondVertex)
+        private int SideTriangleOnBorder(PointD firstVertex, PointD secondVertex)
         {
-
-            for (int i = 0; i < points.Length; i++)
+            for (int i = 0; i < Points.Length; i++)
             {
-                if (i == points.Length - 1)
+                if (i == Points.Length - 1)
                 {
-                    if (((triang.GetDistancePoints(points[i], firstVertex) + triang.GetDistancePoints(firstVertex, points[0])) == triang.GetDistancePoints(points[i], points[0])) &&
-                    ((triang.GetDistancePoints(points[i], secondVertex) + triang.GetDistancePoints(secondVertex, points[0])) == triang.GetDistancePoints(points[i], points[0])))
+                    if (((Triangulation.GetDistancePoints(Points[i], firstVertex) + Triangulation.GetDistancePoints(firstVertex, Points[0])) == Triangulation.GetDistancePoints(Points[i], Points[0])) &&
+                    ((Triangulation.GetDistancePoints(Points[i], secondVertex) + Triangulation.GetDistancePoints(secondVertex, Points[0])) == Triangulation.GetDistancePoints(Points[i], Points[0])))
                     {
                         return i;
                     }
                 }
                 else
                 {
-                    if (((triang.GetDistancePoints(points[i], firstVertex) + triang.GetDistancePoints(firstVertex, points[i + 1])) == triang.GetDistancePoints(points[i], points[i + 1])) &&
-                    ((triang.GetDistancePoints(points[i], secondVertex) + triang.GetDistancePoints(secondVertex, points[i + 1])) == triang.GetDistancePoints(points[i], points[i + 1])))
+                    if (((Triangulation.GetDistancePoints(Points[i], firstVertex) + Triangulation.GetDistancePoints(firstVertex, Points[i + 1])) == Triangulation.GetDistancePoints(Points[i], Points[i + 1])) &&
+                    ((Triangulation.GetDistancePoints(Points[i], secondVertex) + Triangulation.GetDistancePoints(secondVertex, Points[i + 1])) == Triangulation.GetDistancePoints(Points[i], Points[i + 1])))
                     {
                         return i;
                     }

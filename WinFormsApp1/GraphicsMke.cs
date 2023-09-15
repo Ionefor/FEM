@@ -8,23 +8,24 @@
         /// <summary>
         ///Ширина панели
         /// </summary>
-        public int panelWidth;
+        public int PanelWidth { get; private set; }
         /// <summary>
         ///Длина панели
         /// </summary>
-        public int panelHeight;       
+        public int PanelHeight { get; private set; }
+        private Panel XOY { get; set; }
         /// <summary>
         ///Набор треугольников, образующих триангуляцию области 
         /// </summary>
-        private List<Triangle> triangles { get; set; }
-        private Graphics graphics;
-        Panel XOY { get; set; }
+        private List<Triangle> Triangles { get; set; }
+        private readonly Graphics graphics;
+                
         public GraphicsMke(Panel XOY, List<Triangle> triangulation)
         {
             this.XOY = XOY;
-            panelHeight = XOY.Height;
-            panelWidth = XOY.Width;
-            triangles = triangulation;
+            PanelHeight = XOY.Height;
+            PanelWidth = XOY.Width;
+            Triangles = triangulation;
             graphics = XOY.CreateGraphics();
         }
 
@@ -35,15 +36,15 @@
         /// <param name="triangle"></param>
         public void DisplayTriangle(Triangle triangle)
         {
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y);
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y);
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);           
         }
         public void DisplayTriangle(Triangle triangle, Color color)
         {
-            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y);
-            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex1.X, 4 * panelHeight / 5 - 38 * triangle.vertex1.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
-            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * triangle.vertex2.X, 4 * panelHeight / 5 - 38 * triangle.vertex2.Y, panelWidth / 10 + 38 * triangle.vertex3.X, 4 * panelHeight / 5 - 38 * triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
         }
         /// <summary>
         ///Отрисовывает  на панели все треугольники
@@ -51,15 +52,15 @@
         public void DisplayAllTriangles()
         {
             Clear(XOY);
-            for (int i = 0; i < triangles.Count; i++)
+            for (int i = 0; i < Triangles.Count; i++)
             {
                 if (i == 0)
                 {
-                    DisplayTriangle(triangles[i]);
+                    DisplayTriangle(Triangles[i]);
                 }
                 else
                 {
-                    DisplayTriangle(triangles[i]);
+                    DisplayTriangle(Triangles[i]);
                 }
             }
         }
@@ -69,27 +70,27 @@
         /// <param name="color"></param>
         /// <param name="firstPoint"></param>
         /// <param name="secondPoint"></param>
-        public void DrawLine(Color color, PointF firstPoint, PointF secondPoint)
+        public void DrawLine(Color color, PointD firstPoint, PointD secondPoint)
         {
-            graphics.DrawLine(new Pen(color, 2f), panelWidth / 10 + 38 * firstPoint.X, 4 * panelHeight / 5 - 38 * firstPoint.Y, panelWidth / 10 + 38 * secondPoint.X, 4 * panelHeight / 5 - 38 * secondPoint.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)firstPoint.X, 4 * PanelHeight / 5 - 38 * (float)firstPoint.Y, PanelWidth / 10 + 38 * (float)secondPoint.X, 4 * PanelHeight / 5 - 38 * (float)secondPoint.Y);
         }
         /// <summary>
         ///Отрисовывает заданную строку на панели, в указанной точке
         /// </summary>
         /// <param name="str"></param>
         /// <param name="point"></param>
-        public void DrawString(string str, PointF point)
+        public void DrawString(string str, PointD point)
         {
-            graphics.DrawString(str, new Font(FontFamily.GenericSansSerif, 12f), new SolidBrush(Color.Red), panelWidth / 10 + 38 * point.X, 4 * panelHeight / 5 - 38 * point.Y);                                                                                                                                                
+            graphics.DrawString(str, new Font(FontFamily.GenericSansSerif, 12f), new SolidBrush(Color.Red), PanelWidth / 10 + 38 * (float)point.X, 4 * PanelHeight / 5 - 38 * (float)point.Y);                                                                                                                                                
         }
         /// <summary>
         ///Отрисовывает точку на панели
         /// </summary>
         /// <param name="color"></param>
         /// <param name="point"></param>
-        public void DrawPoint(Color color, PointF point)
+        public void DrawPoint(Color color, PointD point)
         {
-            graphics.DrawEllipse(new Pen(color, 2.0f), panelWidth / 10 + 38 * point.X, 4 * panelHeight / 5 - 38 * point.Y, 3, 3);
+            graphics.DrawEllipse(new Pen(color, 2.0f), PanelWidth / 10 + 38 * (float)point.X, 4 * PanelHeight / 5 - 38 * (float)point.Y, 3, 3);
         }
         /// <summary>
         ///Очищает задний фон панели

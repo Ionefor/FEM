@@ -30,6 +30,10 @@
         {
             XOY = new Panel();
             Parametrs = new Panel();
+            sizeText = new Label();
+            mediumSizeGrid = new RadioButton();
+            minSizeGrid = new RadioButton();
+            maxSizeGrid = new RadioButton();
             Kyy = new TextBox();
             KyyText = new Label();
             Kxx = new TextBox();
@@ -72,6 +76,10 @@
             // Parametrs
             // 
             Parametrs.BackColor = Color.FromArgb(204, 204, 255);
+            Parametrs.Controls.Add(sizeText);
+            Parametrs.Controls.Add(mediumSizeGrid);
+            Parametrs.Controls.Add(minSizeGrid);
+            Parametrs.Controls.Add(maxSizeGrid);
             Parametrs.Controls.Add(Kyy);
             Parametrs.Controls.Add(KyyText);
             Parametrs.Controls.Add(Kxx);
@@ -103,6 +111,52 @@
             Parametrs.Name = "Parametrs";
             Parametrs.Size = new Size(410, 666);
             Parametrs.TabIndex = 1;
+            // 
+            // sizeText
+            // 
+            sizeText.AutoSize = true;
+            sizeText.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            sizeText.Location = new Point(38, 297);
+            sizeText.Name = "sizeText";
+            sizeText.Size = new Size(51, 28);
+            sizeText.TabIndex = 29;
+            sizeText.Text = "Size:";
+            // 
+            // mediumSizeGrid
+            // 
+            mediumSizeGrid.AutoSize = true;
+            mediumSizeGrid.BackColor = Color.Transparent;
+            mediumSizeGrid.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            mediumSizeGrid.Location = new Point(18, 360);
+            mediumSizeGrid.Name = "mediumSizeGrid";
+            mediumSizeGrid.Size = new Size(102, 32);
+            mediumSizeGrid.TabIndex = 28;
+            mediumSizeGrid.Text = "medium";
+            mediumSizeGrid.UseVisualStyleBackColor = false;
+            // 
+            // minSizeGrid
+            // 
+            minSizeGrid.AutoSize = true;
+            minSizeGrid.BackColor = Color.Transparent;
+            minSizeGrid.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            minSizeGrid.Location = new Point(18, 392);
+            minSizeGrid.Name = "minSizeGrid";
+            minSizeGrid.Size = new Size(63, 32);
+            minSizeGrid.TabIndex = 27;
+            minSizeGrid.Text = "min";
+            minSizeGrid.UseVisualStyleBackColor = false;
+            // 
+            // maxSizeGrid
+            // 
+            maxSizeGrid.AutoSize = true;
+            maxSizeGrid.BackColor = Color.Transparent;
+            maxSizeGrid.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            maxSizeGrid.Location = new Point(20, 322);
+            maxSizeGrid.Name = "maxSizeGrid";
+            maxSizeGrid.Size = new Size(66, 32);
+            maxSizeGrid.TabIndex = 26;
+            maxSizeGrid.Text = "max";
+            maxSizeGrid.UseVisualStyleBackColor = false;
             // 
             // Kyy
             // 
@@ -391,7 +445,7 @@
         private Button Save;
         private Button GetSolution;
         private Button Change;
-        private Button Show;
+        private new Button Show;
         private Label qtxt;
         private TextBox qval;
         private TextBox Tval;
@@ -412,5 +466,9 @@
         private Label KyyText;
         private TextBox Kxx;
         private Label KxxText;
+        private RadioButton mediumSizeGrid;
+        private RadioButton minSizeGrid;
+        private RadioButton maxSizeGrid;
+        private Label sizeText;
     }
 }

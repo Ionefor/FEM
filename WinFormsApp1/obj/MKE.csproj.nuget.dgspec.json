@@ -51,6 +51,10 @@
             "MathNet.Numerics": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.8.0, )"
             }
           },
           "imports": [
