@@ -1,4 +1,6 @@
-﻿namespace MKE
+﻿using System.Collections.Generic;
+
+namespace MKE
 {
     /// <summary>
 /// Этот класс является заданной областью
@@ -8,7 +10,7 @@
         /// <summary>
         /// Начальные точки сетки
         /// </summary>
-        public PointD[] Points { get; private set; }      
+        public PointD[] Points { get;  set; }
         public Area(PointD[] points) => Points = points;
 
         /// <summary>
@@ -37,6 +39,6 @@
                 Points[i].X += Math.Abs(Shift.X);
                 Points[i].Y += Math.Abs(Shift.Y);
             }
-        }
+        }      
     }
 }

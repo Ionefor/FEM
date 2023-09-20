@@ -127,7 +127,7 @@
             mediumSizeGrid.AutoSize = true;
             mediumSizeGrid.BackColor = Color.Transparent;
             mediumSizeGrid.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            mediumSizeGrid.Location = new Point(18, 360);
+            mediumSizeGrid.Location = new Point(20, 360);
             mediumSizeGrid.Name = "mediumSizeGrid";
             mediumSizeGrid.Size = new Size(102, 32);
             mediumSizeGrid.TabIndex = 28;
@@ -139,7 +139,7 @@
             minSizeGrid.AutoSize = true;
             minSizeGrid.BackColor = Color.Transparent;
             minSizeGrid.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            minSizeGrid.Location = new Point(18, 392);
+            minSizeGrid.Location = new Point(20, 398);
             minSizeGrid.Name = "minSizeGrid";
             minSizeGrid.Size = new Size(63, 32);
             minSizeGrid.TabIndex = 27;

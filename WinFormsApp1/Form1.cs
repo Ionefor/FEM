@@ -36,8 +36,12 @@ namespace WinFormsApp1
         ///Источник тепла внутри тела(области)
         /// </summary>
         private int Q;
-        private bool flagDef = false;
+        /// <summary>
+        /// размер сетки
+        /// </summary>
         private int sizeGridChoice;
+        private bool flagDef = false;
+        
 
         private GraphicsMke grapMke;
         private Solution_Equation solutionEq;
@@ -57,7 +61,6 @@ namespace WinFormsApp1
         private readonly Label QDis = new();
         private readonly Label KText = new();
         private readonly Button Enterdata = new();
-
         public Form1()
         {
             InitializeComponent();
@@ -76,8 +79,8 @@ namespace WinFormsApp1
             hDis.Visible = false;
             qDis.Visible = false;
             TDis.Visible = false;
-            NumVertex.Text = 13.ToString();//
 
+            NumVertex.Text = 4.ToString();
             points = new PointD[int.Parse(NumVertex.Text.ToString())];
             h = new double[int.Parse(NumVertex.Text.ToString())];
             q = new double[int.Parse(NumVertex.Text.ToString())];
@@ -91,40 +94,39 @@ namespace WinFormsApp1
             Kyy.Text = Ky.ToString();
             Qv.Text = Q.ToString();
 
-          /*  points[0].X = 1;
-             points[0].Y = 1;
+              points[0].X = 1;
+               points[0].Y = 1;
 
-             points[1].X = 4;
-             points[1].Y = 1;
+               points[1].X = 4;
+               points[1].Y = 0;
 
-             points[2].X = 4;
-             points[2].Y = 4;
+               points[2].X = 4;
+               points[2].Y = 4;
 
-             points[3].X = 1;
-             points[3].Y = 4;*/
+               points[3].X = 0;
+               points[3].Y = 4;
 
-       /*    points[0].X = 1;
-            points[0].Y = 0;
+            /*    points[0].X = 1;
+                 points[0].Y = 0;
 
-            points[1].X = 5;
-            points[1].Y = 2;
+                 points[1].X = 5;
+                 points[1].Y = 2;
 
-            points[2].X = 5;
-            points[2].Y = 3;
+                 points[2].X = 5;
+                 points[2].Y = 3;
 
-            points[3].X = 4;
-            points[3].Y = 3;
+                 points[3].X = 4;
+                 points[3].Y = 3;
 
-            points[4].X = 3;
-            points[4].Y = 4;
+                 points[4].X = 3;
+                 points[4].Y = 4;
 
-            points[5].X = 2;
-            points[5].Y = 2;
+                 points[5].X = 2;
+                 points[5].Y = 2;
 
-            points[6].X = 0;
-            points[6].Y = 3;*/
-
-
+                 points[6].X = 0;
+                 points[6].Y = 3;*/
+            
             h[0] = 150;
             t_inf[0] = 320;
             q[0] = 0;
@@ -141,7 +143,7 @@ namespace WinFormsApp1
             t_inf[3] = 300;
             q[3] = 0;
 
-            h[4] = 150;
+           /* h[4] = 150;
             t_inf[4] = 300;
             q[4] = 0;
 
@@ -153,92 +155,90 @@ namespace WinFormsApp1
             t_inf[6] = 300;
             q[6] = 0;
 
-             h[7] = 150;
-              t_inf[7] = 300;
-              q[7] = 0;
+            h[7] = 150;
+            t_inf[7] = 300;
+            q[7] = 0;
 
-              h[8] = 150;
-              t_inf[8] = 301;
-              q[8] = 0;
+            h[8] = 150;
+            t_inf[8] = 301;
+            q[8] = 0;
 
-              h[9] = 150;
-              t_inf[9] = 300;
-              q[9] = 0;
+            h[9] = 150;
+            t_inf[9] = 300;
+            q[9] = 0;
 
-              h[10] = 150;
-              t_inf[10] = 300;
-              q[10] = 0;
+            h[10] = 150;
+            t_inf[10] = 300;
+            q[10] = 0;
 
-              h[11] = 150;
-              t_inf[11] = 300;
-              q[11] = 0;
+            h[11] = 150;
+            t_inf[11] = 300;
+            q[11] = 0;
 
-              h[12] = 150;
-              t_inf[12] = 300;
-              q[12] = 0;
+            h[12] = 150;
+            t_inf[12] = 300;
+            q[12] = 0;
+            //
+            points[0].X = 1;
+            points[0].Y = 6;
 
-              //
-              points[0].X = 1;
-              points[0].Y = 6;
+            points[1].X = 2.5f;
+            points[1].Y = 2;
 
-              points[1].X = 2.5f;
-              points[1].Y = 2;
+            points[2].X = 4;
+            points[2].Y = 3.5f;
 
-              points[2].X = 4;
-              points[2].Y = 3.5f;
+            points[3].X = 6.5f;
+            points[3].Y = 3.5f;
 
-              points[3].X = 6.5f;
-              points[3].Y = 3.5f;
+            points[4].X = 7.5f;
+            points[4].Y = 0.5f;
 
-              points[4].X = 7.5f;
-              points[4].Y = 0.5f;
+            points[5].X = 9.5f;
+            points[5].Y = 2;
 
-              points[5].X = 9.5f;
-              points[5].Y = 2;
+            points[6].X = 9;
+            points[6].Y = 4.5f;
 
-              points[6].X = 9;
-              points[6].Y = 4.5f;
+            points[7].X = 13;
+            points[7].Y = 4;
 
-              points[7].X = 13;
-              points[7].Y = 4;
+            points[8].X = 12.5f;
+            points[8].Y = 7.5f;
 
-              points[8].X = 12.5f;
-              points[8].Y = 7.5f;
+            points[9].X = 9.5f;
+            points[9].Y = 7.5f;
 
-              points[9].X = 9.5f;
-              points[9].Y = 7.5f;
+            points[10].X = 6;
+            points[10].Y = 7;
 
-              points[10].X = 6;
-              points[10].Y = 7;
+            points[11].X = 5;
+            points[11].Y = 8.5f;
 
-              points[11].X = 5;
-              points[11].Y = 8.5f;
+            points[12].X = 4;
+            points[12].Y = 6;*/
 
-              points[12].X = 4;
-              points[12].Y = 6;
-
+            sizeGridChoice = 1;
+            maxSizeGrid.Checked = true;
 
             area = new Area(points);
             area.ShiftingPointsArea();
 
-           
-           sizeGridChoice = 1;
-           maxSizeGrid.Checked = true;
-
-            triangulation = new Triangulation(area.Points, sizeGridChoice);
+            triangulation = new Triangulation(area.Points, sizeGridChoice);         
             triangulation.InitialPartitioning();
             triangulation.DelaunayTriangulation();
             triangulation.DeterminingNodeNumbers();
 
             grapMke = new GraphicsMke(XOY, triangulation.Triangles);
             grapMke.DisplayAllTriangles();
+            
             sizeText.Text = "Size:";
             sizeText.Visible = true;
             maxSizeGrid.Visible = true;
             mediumSizeGrid.Visible = true;
             minSizeGrid.Visible = true;
-            InterfaceFinalView();
 
+            InterfaceFinalView();
 
             hval.Text = h[0].ToString();
             Tval.Text = t_inf[0].ToString();
@@ -248,7 +248,7 @@ namespace WinFormsApp1
         /// Вид интерфейса на первом шаге работы программы
         /// </summary>
         private void InterfaceFirstStep()
-        {
+        {                    
             maxSizeGrid.Visible = false;
             mediumSizeGrid.Visible = false;
             minSizeGrid.Visible = false;
@@ -269,7 +269,7 @@ namespace WinFormsApp1
             Change.Visible = false;
             GetSolution.Visible = false;
             Save.Visible = false;
-            EnableNodes.Visible = false;
+            EnableNodes.Visible = false;         
 
             DataText.Text = "Введите данные:";
             DataText.Location = new Point(130, 15);
@@ -287,7 +287,6 @@ namespace WinFormsApp1
             NumVertex.AutoSize = false;
             NumVertex.Size = new Size(70, 30);
             NumVertex.TextAlign = HorizontalAlignment.Center;
-
 
             Parametrs.Controls.Add(CoordinatesVertexText);
             CoordinatesVertexText.Text = "Координаты первой вершины:";
@@ -308,7 +307,6 @@ namespace WinFormsApp1
             X.Size = new Size(70, 30);
             X.TextAlign = HorizontalAlignment.Center;
 
-
             Parametrs.Controls.Add(YText);
             YText.Text = "Y:";
             YText.Location = new Point(220, 170);
@@ -322,7 +320,6 @@ namespace WinFormsApp1
             Y.Size = new Size(70, 30);
             Y.TextAlign = HorizontalAlignment.Center;
 
-
             QDis.Text = "Источник тепла внутри тела:";
             QDis.Location = new Point(70, 210);
             QDis.Font = new Font("Times New Roman", 15.0f);
@@ -333,7 +330,6 @@ namespace WinFormsApp1
             Qv.AutoSize = false;
             Qv.Location = new Point(180, 250);
             Qv.Size = new Size(70, 30);
-
 
             hDis.Text = "Коэффициент теплообмена:";
             hDis.Location = new Point(100, 290);
@@ -356,7 +352,6 @@ namespace WinFormsApp1
             Tval.AutoSize = false;
             Tval.Location = new Point(180, 410);
             Tval.Size = new Size(70, 30);
-
 
             qDis.Text = "Поток тепла:";
             qDis.Location = new Point(150, 455);
@@ -588,6 +583,11 @@ namespace WinFormsApp1
             Kyy.Enabled = false;
 
             sizeText.Text = "Size:";
+            sizeText.Location = new Point(38, 297);
+
+            maxSizeGrid.Location = new Point(20, 322);
+            mediumSizeGrid.Location = new Point(20, 360);
+            minSizeGrid.Location = new Point(20, 398);
 
             Show.Location = new Point(129, 297);
             Change.Location = new Point(129, 371);
@@ -683,6 +683,52 @@ namespace WinFormsApp1
             return -1;
         }
         /// <summary>
+        /// Проверяет существует ли вновь добавленная точка в текущем массиве точек
+        /// </summary>
+        /// <param name="currentPoint"></param>
+        /// <returns></returns>
+        private bool PointIsExistInSet(double x, double y)
+        {
+            PointD currentPoint = new(x, y);
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                if (currentPoint == points[i])
+                {
+                    MessageBox.Show("Вы уже задали такую точку");
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Переход к предыдущему шагу работы программы
+        /// </summary>
+        private void TakingStepBack()
+        {
+            if (countStepEnterData == 0)
+            {
+                X.Text = null;
+                Y.Text = null;
+                Qv.Text = null;
+                NumVertex.Text = null;
+                Kxx.Text = null;
+                Kyy.Text = null;
+                hval.Text = null;
+                Tval.Text = null;
+                qval.Text = null;
+            }
+            else
+            {
+                X.Text = null;
+                Y.Text = null;
+                hval.Text = null;
+                Tval.Text = null;
+                qval.Text = null;              
+            }
+            countStepEnterData--;
+        }
+        /// <summary>
         /// Отрисовывает границу по ее номеру
         /// </summary>
         /// <param name="numBorder"></param>
@@ -721,23 +767,37 @@ namespace WinFormsApp1
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Enterdata_Click(object? sender, EventArgs e)
-        {
-            TestData();
-            return;
+        {        
+             // Запуск с тестовыми данными
+            //TestData();
+           // return;
+
             try
             {
                 if (countStepEnterData == 0)
                 {
-                    points = new PointD[int.Parse(NumVertex.Text.ToString())];
-                    h = new double[int.Parse(NumVertex.Text.ToString())];
-                    q = new double[int.Parse(NumVertex.Text.ToString())];
-                    t_inf = new double[int.Parse(NumVertex.Text.ToString())];
+                    int aa = int.Parse(NumVertex.Text.ToString());
+                    if (int.Parse(NumVertex.Text.ToString()) < 3)
+                    {
+                        TakingStepBack();
+                        countStepEnterData++;
+                        return;                       
+                    }
+                    else
+                    {
+                        points = new PointD[int.Parse(NumVertex.Text.ToString())];
+                        h = new double[int.Parse(NumVertex.Text.ToString())];
+                        q = new double[int.Parse(NumVertex.Text.ToString())];
+                        t_inf = new double[int.Parse(NumVertex.Text.ToString())];
 
-                    Kx = int.Parse(Kxx.Text);
-                    Ky = int.Parse(Kyy.Text);
-                    Q = int.Parse(Qv.Text);
-                    InterfaceOtherStep();
-                }
+                        Kx = int.Parse(Kxx.Text);
+                        Ky = int.Parse(Kyy.Text);
+                        Q = int.Parse(Qv.Text);
+
+                        InterfaceOtherStep();
+                        MessageBox.Show("Введенные вами вершины должны задаваться последовательно против часовой стрелки");
+                    }                   
+                }       
                 else if (countStepEnterData == int.Parse(NumVertex.Text) - 1)
                 {
                     if (maxSizeGrid.Checked)
@@ -751,37 +811,31 @@ namespace WinFormsApp1
                     else
                     {
                         sizeGridChoice = 3;
-                    }
+                    }                                    
+                }                              
+
+                if (countStepEnterData == 1 && PointIsExistInSet(double.Parse(X.Text), double.Parse(Y.Text)))
+                {
+                    TakingStepBack();
                 }
-                points[countStepEnterData].X = float.Parse(X.Text);
-                points[countStepEnterData].Y = float.Parse(Y.Text);
+                else if (countStepEnterData != 0 && PointIsExistInSet(double.Parse(X.Text), double.Parse(Y.Text)))
+                {
+                    TakingStepBack();
+                }
+                else
+                {
+                    points[countStepEnterData].X = double.Parse(X.Text);
+                    points[countStepEnterData].Y = double.Parse(Y.Text);
 
-                h[countStepEnterData] = double.Parse(hval.Text);
-                q[countStepEnterData] = double.Parse(qval.Text);
-                t_inf[countStepEnterData] = double.Parse(Tval.Text);
-
-
+                    h[countStepEnterData] = double.Parse(hval.Text);
+                    q[countStepEnterData] = double.Parse(qval.Text);
+                    t_inf[countStepEnterData] = double.Parse(Tval.Text);
+                }
             }
             catch
             {
                 MessageBox.Show("Проверьте введенные данные. \nЗначения параметров должны являться вещественными числами");
-
-                if (countStepEnterData == 0)
-                {
-                    X.Text = null;
-                    Y.Text = null;
-                    Qv.Text = null;
-                    NumVertex.Text = null;
-                }
-                else
-                {
-                    X.Text = null;
-                    Y.Text = null;
-                    hval.Text = null;
-                    Tval.Text = null;
-                    qval.Text = null;
-                }
-                countStepEnterData--;
+                TakingStepBack();
             }
 
             if (countStepEnterData > 0 && countStepEnterData == int.Parse(NumVertex.Text) - 1)
@@ -826,9 +880,9 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void Show_Click(object sender, EventArgs e)
         {
-             bool result  = int.TryParse(NumG.Text, out int numBorder);
- 
-            if(result)
+            bool result = int.TryParse(NumG.Text, out int numBorder);
+
+            if (result)
             {
                 if (numBorder > 0 && numBorder < points.Length)
                 {
@@ -863,9 +917,9 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void Change_Click(object sender, EventArgs e)
         {
-            bool result  = int.TryParse(NumG.Text, out int numBorder);
- 
-            if(result)
+            bool result = int.TryParse(NumG.Text, out int numBorder);
+
+            if (result)
             {
                 if (numBorder > 0 && numBorder < points.Length)
                 {
