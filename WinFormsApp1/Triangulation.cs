@@ -1,8 +1,6 @@
 ﻿using OpenTK.Mathematics;
-using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 
 namespace MKE
 {

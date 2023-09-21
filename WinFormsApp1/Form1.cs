@@ -42,7 +42,6 @@ namespace WinFormsApp1
         private int sizeGridChoice;
         private bool flagDef = false;
         
-
         private GraphicsMke grapMke;
         private Solution_Equation solutionEq;
         private Area area;
@@ -74,6 +73,9 @@ namespace WinFormsApp1
         /// </summary>
         private void TestData()
         {
+            TestData();
+            return;
+            //
             KText.Visible = false;
             QDis.Visible = false;
             hDis.Visible = false;
@@ -675,7 +677,7 @@ namespace WinFormsApp1
 
             if (minDistance < 0.1)
             {
-                grapMke.DrawPoint(Color.FromArgb(27, 42, 207), triangulation.Nodes[indexNode].Node);
+                grapMke.DrawPoint(Color.FromArgb(66, 177, 189), triangulation.Nodes[indexNode].Node);
                 grapMke.DrawString(triangulation.Nodes[indexNode].NumNode.ToString(), triangulation.Nodes[indexNode].Node);
 
                 return indexNode;
@@ -740,11 +742,11 @@ namespace WinFormsApp1
                 {
                     if (numBorder == points.Length)
                     {
-                        grapMke.DrawLine(Color.FromArgb(237, 41, 57), points[numBorder - 1], points[0]);
+                        grapMke.DrawLine(Color.FromArgb(255, 36, 0), points[numBorder - 1], points[0]);
                     }
                     else
                     {
-                        grapMke.DrawLine(Color.FromArgb(237, 41, 57), points[numBorder - 1], points[numBorder]);
+                        grapMke.DrawLine(Color.FromArgb(255, 36, 0), points[numBorder - 1], points[numBorder]);
 
                     }
                 }
@@ -768,10 +770,6 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void Enterdata_Click(object? sender, EventArgs e)
         {        
-             // Запуск с тестовыми данными
-            //TestData();
-           // return;
-
             try
             {
                 if (countStepEnterData == 0)
@@ -884,24 +882,29 @@ namespace WinFormsApp1
 
             if (result)
             {
-                if (numBorder > 0 && numBorder < points.Length)
+                if (numBorder > 0 && numBorder <= points.Length)
                 {
                     ShowBorder(numBorder);
 
-                    if (numBorder != 0)
-                    {
-                        hval.Text = h[numBorder - 1].ToString();
-                        Tval.Text = t_inf[numBorder - 1].ToString();
-                        qval.Text = q[numBorder - 1].ToString();
-                    }
+                    hval.Text = h[numBorder - 1].ToString();
+                    Tval.Text = t_inf[numBorder - 1].ToString();
+                    qval.Text = q[numBorder - 1].ToString();
                 }
                 else
-                {
+                {       
+                    if(numBorder == 0)
+                    {
+                        ShowBorder(numBorder);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Границы с таким номером не существует");
+                    }
+
                     hval.Text = h[0].ToString();
                     Tval.Text = t_inf[0].ToString();
                     qval.Text = q[0].ToString();
-                    NumG.Text = "1";
-                    MessageBox.Show("Границы с таким номером не существует");
+                    NumG.Text = "1";                  
                 }
             }
             else
@@ -1035,20 +1038,22 @@ namespace WinFormsApp1
 
                 if (PointCloseNode(pointOnPanel) != -1)
                 {
-                    NumNodes.Text = (PointCloseNode(pointOnPanel) + 1).ToString();
+                    NumNodes.Text = (PointCloseNode(pointOnPanel) + 1).ToString();                  
                 }
-
-                numBorder = PointOnLine(pointOnPanel);
-
-                if (numBorder != -1)
+                else
                 {
-                    ShowBorder(numBorder);
+                    numBorder = PointOnLine(pointOnPanel);
 
-                    NumG.Text = numBorder.ToString();
-                    hval.Text = h[numBorder - 1].ToString();
-                    Tval.Text = t_inf[numBorder - 1].ToString();
-                    qval.Text = q[numBorder - 1].ToString();
-                }
+                    if (numBorder != -1)
+                    {
+                        ShowBorder(numBorder);
+
+                        NumG.Text = numBorder.ToString();
+                        hval.Text = h[numBorder - 1].ToString();
+                        Tval.Text = t_inf[numBorder - 1].ToString();
+                        qval.Text = q[numBorder - 1].ToString();
+                    }
+                }              
             }
         }
         /// <summary>
@@ -1109,7 +1114,7 @@ namespace WinFormsApp1
                 catch
                 {
                     MessageBox.Show("Номера узлов должны являться целыми числами");
-                    NumNodes.Text = "0";
+                    NumNodes.Text = "1";
                     return;
                 }
             }
@@ -1121,7 +1126,16 @@ namespace WinFormsApp1
                     {
                         int numNode = int.Parse(nodesFirstPart);
 
-                        if (numNode < 1 || numNode > triangulation.Nodes.Count)
+                        if (numNode == 0)
+                        {
+                            grapMke.Clear(XOY);
+                            for (int i = 0; i < triangulation.Triangles.Count; i++)
+                            {
+                                grapMke.DisplayTriangle(triangulation.Triangles[i]);
+                            }
+                            NumNodes.Text = "1";
+                        }
+                        else if (numNode < 0 || numNode > triangulation.Nodes.Count)
                         {
                             MessageBox.Show("Такого узла не существует");
                         }
@@ -1133,7 +1147,7 @@ namespace WinFormsApp1
                                 grapMke.DisplayTriangle(triangulation.Triangles[i]);
                             }
                             grapMke.DrawString(NumNodes.Text, triangulation.Nodes[int.Parse(nodesFirstPart) - 1].Node);
-                            grapMke.DrawPoint(Color.FromArgb(27, 42, 207), triangulation.Nodes[int.Parse(nodesFirstPart) - 1].Node);
+                            grapMke.DrawPoint(Color.FromArgb(67, 0, 255), triangulation.Nodes[int.Parse(nodesFirstPart) - 1].Node);
                         }
                     }
                     else
@@ -1144,7 +1158,7 @@ namespace WinFormsApp1
                 catch
                 {
                     MessageBox.Show("Номер узла должен являться целым числом");
-                    NumNodes.Text = "0";
+                    NumNodes.Text = "1";
                 }
             }
         }

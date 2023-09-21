@@ -10,7 +10,7 @@ namespace MKE
         /// <summary>
         /// Начальные точки сетки
         /// </summary>
-        public PointD[] Points { get;  set; }
+        public PointD[] Points { get;  private set; }
         public Area(PointD[] points) => Points = points;
 
         /// <summary>

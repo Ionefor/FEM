@@ -90,7 +90,7 @@
         /// <param name="point"></param>
         public void DrawPoint(Color color, PointD point)
         {
-            graphics.DrawEllipse(new Pen(color, 2.0f), PanelWidth / 10 + 38 * (float)point.X, 4 * PanelHeight / 5 - 38 * (float)point.Y, 3, 3);
+            graphics.DrawEllipse(new Pen(color, 3.0f), PanelWidth / 10 + 38 * (float)point.X, 4 * PanelHeight / 5 - 38 * (float)point.Y, 3, 3);
         }
         /// <summary>
         ///Очищает задний фон панели
