@@ -18,8 +18,7 @@
         ///Набор треугольников, образующих триангуляцию области 
         /// </summary>
         private List<Triangle> Triangles { get; set; }
-        private readonly Graphics graphics;
-                
+        private readonly Graphics graphics;            
         public GraphicsMke(Panel XOY, List<Triangle> triangulation)
         {
             this.XOY = XOY;
@@ -28,7 +27,6 @@
             Triangles = triangulation;
             graphics = XOY.CreateGraphics();
         }
-
         /// <summary>
         ///Отрисовывает на панеле данный треугольник
         /// </summary>
@@ -36,15 +34,15 @@
         /// <param name="triangle"></param>
         public void DisplayTriangle(Triangle triangle)
         {
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y);
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
-            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);           
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.FirstVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.FirstVertex.Y, PanelWidth / 10 + 38 * (float)triangle.SecondVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.SecondVertex.Y);
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.FirstVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.FirstVertex.Y, PanelWidth / 10 + 38 * (float)triangle.ThirdVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.ThirdVertex.Y);
+            graphics.DrawLine(new Pen(Color.FromArgb(0, 0, 0), 2f), PanelWidth / 10 + 38 * (float)triangle.SecondVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.SecondVertex.Y, PanelWidth / 10 + 38 * (float)triangle.ThirdVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.ThirdVertex.Y);           
         }
         public void DisplayTriangle(Triangle triangle, Color color)
         {
-            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y);
-            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex1.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex1.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
-            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.vertex2.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex2.Y, PanelWidth / 10 + 38 * (float)triangle.vertex3.X, 4 * PanelHeight / 5 - 38 * (float)triangle.vertex3.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.FirstVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.FirstVertex.Y, PanelWidth / 10 + 38 * (float)triangle.SecondVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.SecondVertex.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.FirstVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.FirstVertex.Y, PanelWidth / 10 + 38 * (float)triangle.ThirdVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.ThirdVertex.Y);
+            graphics.DrawLine(new Pen(color, 2f), PanelWidth / 10 + 38 * (float)triangle.SecondVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.SecondVertex.Y, PanelWidth / 10 + 38 * (float)triangle.ThirdVertex.X, 4 * PanelHeight / 5 - 38 * (float)triangle.ThirdVertex.Y);
         }
         /// <summary>
         ///Отрисовывает  на панели все треугольники

@@ -66,10 +66,10 @@
             // XOY
             // 
             XOY.BackColor = Color.Linen;
-            XOY.Dock = DockStyle.Left;
+            XOY.Dock = DockStyle.Fill;
             XOY.Location = new Point(0, 0);
             XOY.Name = "XOY";
-            XOY.Size = new Size(1032, 666);
+            XOY.Size = new Size(1442, 666);
             XOY.TabIndex = 0;
             XOY.MouseClick += XOY_MouseClick;
             // 
@@ -106,7 +106,7 @@
             Parametrs.Controls.Add(Qv);
             Parametrs.Controls.Add(Qt);
             Parametrs.Controls.Add(DataText);
-            Parametrs.Dock = DockStyle.Fill;
+            Parametrs.Dock = DockStyle.Right;
             Parametrs.Location = new Point(1032, 0);
             Parametrs.Name = "Parametrs";
             Parametrs.Size = new Size(410, 666);
