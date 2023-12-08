@@ -8,10 +8,9 @@ namespace MKE
 {
     public class Area
     {
-        private PointD[] _points;
+        private readonly PointD[] _points;
         public PointD[] Points { get => _points; }
         public Area(PointD[] points) => _points = points;
-
         public void ShiftingPointsArea()
         {
             PointD Shift = new()

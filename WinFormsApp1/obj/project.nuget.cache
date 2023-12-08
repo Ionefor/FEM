@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BS6OznzrjphA8uvRerdhaDPt9uI95ibQgOCTe8zT4Zmlbu73yzRfOhVT3gOHFm/JEkoyJ5XLNvY1s9K91kFmBg==",
+  "dgSpecHash": "rmKLMxU0aI/VrEmeAEYVSVGz6j+D9UXx5FvlL5quaKEWG1bnGNn+NS/cPnRQaLzwv77e6JM8JKg250uBmcsSzQ==",
   "success": true,
-  "projectFilePath": "G:\\Programming\\FEM-main\\WinFormsApp1\\MKE.csproj",
+  "projectFilePath": "G:\\Programming\\Csharp\\Projects\\FEM-main\\WinFormsApp1\\MKE.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gusev\\.nuget\\packages\\dotnumerics\\1.1.0\\dotnumerics.1.1.0.nupkg.sha512",
     "C:\\Users\\gusev\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",

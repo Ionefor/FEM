@@ -11,62 +11,56 @@ namespace MKE
         /// <summary>
         /// Коэффициент теплопроводности в направлении х
         /// </summary>
-        private double _Kxx;
+        private readonly double _Kxx;
         /// <summary>
         /// Коэффициент теплопроводности в направлении у
         /// </summary>
-        private double _Kyy;
+        private readonly double _Kyy;
         /// <summary>
         /// Источник тепла внутри тела
         /// </summary>
-        private double _Q;
-        /// <summary>
-        /// Коэффициент теплообмена на каждой стороне области
-        /// </summary>
-        private double[] _h;
-        /// <summary>
-        /// Поток тепла для каждой границе области
-        /// </summary>
-        private double[] _q;
-        /// <summary>
-        /// Окружающая температура с каждой из сторон области
-        /// </summary>
-        private double[] _t_inf;
+        private readonly double _Q;
         /// <summary>
         /// Глобальный вектор-столбец нагрузки
         /// </summary>
-        private double[] _F;
+        private readonly double[] _F;
         /// <summary>
         /// Глобальная матрица жесткости
         /// </summary>
-        private double[,] _K;
+        private readonly double[,] _K;
         private double[] _result;
-        private int _countNodes;
+        private readonly int _countNodes;
+        private List<BorderData> _borderData;
         /// <summary>
         /// Изначальные точки области
         /// </summary>
-        private PointD[] _points;
+        private readonly PointD[] _points;
         /// <summary>
         /// Список структур треугольников триангуляции Делоне
         /// </summary>
-        private List<Triangle> _triangles;
+        private readonly List<Triangle> _triangles;
+        private readonly List<BorderAndNode> _borderAndNodes;
+        private readonly Dictionary<int, double> _temperatureBorder;
         /// <summary>
         /// Искомый столбец температур
         /// </summary>
         public double[] Result { get => _result; }
-        public SolutionEquation(double Kxx, double Kyy, double Q, double[] h, double[] q, double[] t_inf, int countNodes, List<Triangle> triangles, PointD[] points)
+        public SolutionEquation(double Kxx, double Kyy, double Q, List<BorderData> borderData, int countNodes,
+            List<Triangle> triangles, PointD[] points, List<BorderAndNode> borderAndNodes, Dictionary<int, double> temperatureBorder)
         {
             _Kxx = Kxx;
             _Kyy = Kyy;
             _Q = Q;
-            _h = h;
-            _q = q;
-            _t_inf = t_inf;
-            _points = points;
+            _borderData = borderData;
+             _points = points;
             _triangles = triangles;
             _countNodes = countNodes;
+            _borderAndNodes = borderAndNodes;
+            _temperatureBorder = temperatureBorder;  
             _F = new double[_countNodes];
             _K = new double[_countNodes, _countNodes];
+            _result = new double[_countNodes];
+            
         }
         public void FindGlobalMatrix()
         {
@@ -93,33 +87,57 @@ namespace MKE
                 CompletionMatrixF(_triangles[i], matrixF_e);
                 CompletionMatrixK(_triangles[i], matrixK_e);
             }
+            SetterTempNode();
         }
         /// <summary>
         /// Нахождение искомого столбца температур
         /// </summary>
         public void FindColumnTemperature()
         {
-            SparseMatrix matrixK = new(_countNodes, _countNodes);
-            double[] rightSide = new double[_countNodes];
+             SparseMatrix matrixK = new(_countNodes, _countNodes);
+             double[] rightSide = new double[_countNodes];
 
-            for (int i = 0; i < _countNodes; i++)
+             for (int i = 0; i < _countNodes; i++)
+             {
+                 rightSide[i] = _F[i];
+
+                 for (int j = 0; j < _countNodes; j++)
+                 {
+                     matrixK[i, j] = _K[i, j];
+                 }
+             }
+
+             var columnTemperature = matrixK.Solve(DenseVector.Build.DenseOfArray(rightSide)).ToArray();
+             _result = new double[columnTemperature.Length];
+
+             for (int i = 0; i < columnTemperature.Length; i++)
+             {
+                 Result[i] = columnTemperature[i];
+             }
+            /*for (int z = 0; z < _countNodes - 1; z++)
             {
-                rightSide[i] = _F[i];
-
-                for (int j = 0; j < _countNodes; j++)
+                for (int i = z + 1; i < _countNodes; i++)
                 {
-                    matrixK[i, j] = _K[i, j];
+                    for (int j = z + 1; j < _countNodes; j++)
+                    {
+                        _K[i, j] = _K[i, j] - _K[z, j] * (_K[i, z] / _K[z, z]);
+                    }
+                    _F[i] = _F[i] - _F[z] * _K[i, z] / _K[z, z];
                 }
             }
 
-            var columnTemperature = matrixK.Solve(DenseVector.Build.DenseOfArray(rightSide)).ToArray();
-            _result = new double[columnTemperature.Length];
-
-            for (int i = 0; i < columnTemperature.Length; i++)
+            for (int i = _countNodes - 1; i >= 0; i--)
             {
-                Result[i] = columnTemperature[i];
-            }
-        }
+                double s = 0;
+
+                for (int j = i + 1; j < _countNodes; j++)
+                {
+                    s += +_K[i, j] * _result[j];
+                }
+                _result[i] = (_F[i] - s) / _K[i, i];
+            }*/
+        }  
+      
         /// <summary>
         /// Нахождение первого интеграла К для отдельного элемента
         /// </summary>
@@ -189,11 +207,11 @@ namespace MKE
                                 }
                                 else if (j == k)
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[0]) / 3;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[0]) / 3;
                                 }
                                 else
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[0]) / 6;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[0]) / 6;
                                 }
                             }
                         }
@@ -210,11 +228,11 @@ namespace MKE
                                 }
                                 else if (j == k)
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[1]) / 3;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[1]) / 3;
                                 }
                                 else
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[1]) / 6;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[1]) / 6;
                                 }
                             }
                         }
@@ -231,11 +249,11 @@ namespace MKE
                                 }
                                 else if (j == k)
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[2]) / 3;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[2]) / 3;
                                 }
                                 else
                                 {
-                                    secondI[j, k] += (_h[numberBorder[i]] * distanceSide[2]) / 6;
+                                    secondI[j, k] += (_borderData[numberBorder[i]].h * distanceSide[2]) / 6;
                                 }
                             }
                         }
@@ -314,7 +332,7 @@ namespace MKE
                             }
                             else
                             {
-                                secondIf[j] += distanceSide[0] * (_q[numberBorder[i]] - _h[numberBorder[i]] * _t_inf[numberBorder[i]]) / 2;
+                                secondIf[j] += distanceSide[0] * (_borderData[numberBorder[i]].q - _borderData[numberBorder[i]].h * _borderData[numberBorder[i]].T_inf) / 2;
                             }
                         }
                     }
@@ -328,7 +346,7 @@ namespace MKE
                             }
                             else
                             {
-                                secondIf[j] += distanceSide[1] * (_q[numberBorder[i]] - _h[numberBorder[i]] * _t_inf[numberBorder[i]]) / 2;
+                                secondIf[j] += distanceSide[1] * (_borderData[numberBorder[i]].q - _borderData[numberBorder[i]].h * _borderData[numberBorder[i]].T_inf) / 2;
                             }
                         }
                     }
@@ -342,7 +360,7 @@ namespace MKE
                             }
                             else
                             {
-                                secondIf[j] += distanceSide[2] * (_q[numberBorder[i]] - _h[numberBorder[i]] * _t_inf[numberBorder[i]]) / 2;
+                                secondIf[j] += distanceSide[2] * (_borderData[numberBorder[i]].q - _borderData[numberBorder[i]].h * _borderData[numberBorder[i]].T_inf) / 2;
                             }
                         }
                     }
@@ -404,26 +422,28 @@ namespace MKE
             {
                 for (int j = 0; j < _countNodes; j++)
                 {
+                  
                     //1
                     if (i == (triangle.FirstNodeNum - 1) && j == (triangle.FirstNodeNum - 1))
                     {
                         _K[i, j] += matrixK_e[0, 0];
+                      
                     }
 
                     if (i == (triangle.FirstNodeNum - 1) && j == (triangle.SecondNodeNum - 1))
                     {
-                        _K[i, j] += matrixK_e[0, 1];
+                        _K[i, j] += matrixK_e[0, 1]; 
                     }
 
                     if (i == (triangle.FirstNodeNum - 1) && j == (triangle.ThirdNodeNum - 1))
                     {
-                        _K[i, j] += matrixK_e[0, 2];
+                        _K[i, j] += matrixK_e[0, 2]; 
                     }
 
                     //2
                     if (i == (triangle.SecondNodeNum - 1) && j == (triangle.FirstNodeNum - 1))
                     {
-                        _K[i, j] += matrixK_e[1, 0];
+                        _K[i, j] += matrixK_e[1, 0]; 
                     }
 
                     if (i == (triangle.SecondNodeNum - 1) && j == (triangle.SecondNodeNum - 1))
@@ -450,9 +470,18 @@ namespace MKE
                     if (i == (triangle.ThirdNodeNum - 1) && j == (triangle.ThirdNodeNum - 1))
                     {
                         _K[i, j] += matrixK_e[2, 2];
-                    }
+                    }                 
                 }
             }
+        }
+        private void SetterTempNode()
+        {
+           for(int i = 0; i < _borderAndNodes.Count; i++)
+           {
+                double currentNodeTemp = _K[_borderAndNodes[i].NumNode, _borderAndNodes[i].NumNode];
+                _K[_borderAndNodes[i].NumNode, _borderAndNodes[i].NumNode] = _K[_borderAndNodes[i].NumNode, _borderAndNodes[i].NumNode] * 10000000000000000000000000000000000000000000.0;
+                _F[_borderAndNodes[i].NumNode] = currentNodeTemp * _temperatureBorder[_borderAndNodes[i].NumBorder] * 10000000000000000000000000000000000000000000.0;
+           }
         }
         /// <summary>
         /// Возвращает номер стороны области, на которую опирается треугольник, иначе возвращает -1
@@ -482,6 +511,6 @@ namespace MKE
                 }
             }
             return -1;
-        }
+        }    
     }
 }

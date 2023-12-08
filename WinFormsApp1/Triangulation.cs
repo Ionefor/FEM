@@ -18,18 +18,19 @@ namespace MKE
         /// Начальный массив точек области
         /// </summary>
         private PointD[] _points;
+        private Panel XOY;
         public List<Triangle> Triangles { get => _triangles; }
-        public Triangulation(PointD[] points, int sizeGridChoice)
+        public Triangulation(PointD[] points, int sizeGridChoice, Panel xoy)
         {
             _sizeGridChoice = sizeGridChoice;
             _points = points;
-
+            XOY = xoy;
             _triangles = new();
         }
         public void InitialPartitioningArea()
         {
             Vector2d[] vectors;
-            Triangle tempTriangle = new();
+            
 
             int iFirstIndex, iSecondIndex, iThirdIndex;
             int jFirstIndex, jSecondIndex, jThirdIndex;
@@ -98,7 +99,7 @@ namespace MKE
                     iSecondIndex = foundIndex + 1;
                     iThirdIndex = foundIndex + 2;
                 }
-
+                Triangle tempTriangle = new();
                 tempTriangle.FirstVertex = splitPoints[iFirstIndex];
                 tempTriangle.SecondVertex = splitPoints[iSecondIndex];
                 tempTriangle.ThirdVertex = splitPoints[iThirdIndex];
@@ -116,16 +117,27 @@ namespace MKE
         }
         public void DelaunayTriangulation()
         {
+            GraphicsMke g = new(XOY, _triangles);
+          //  g.DisplayAllTriangles();
             PointD midPoint = new();
             double hInitial = Mathematics.ShortestEdgeTriagnle(ref _triangles);
 
-        step_two:;
-            int indexBadTriangle = FindIndexBadTriangle(hInitial);
+            step_two:;
 
+            int indexBadTriangle = FindIndexBadTriangle(hInitial);
+            if(_triangles.Count > 20000)
+            {
+              // 
+            }
+           g.DisplayAllTriangles();
             if (indexBadTriangle != -1)
             {
                 for (int i = 0; i < _triangles.Count; i++)
                 {
+                    if(i == indexBadTriangle)
+                    {
+                        continue;
+                    }
                     if (Mathematics.PointIsDiametralCircle(_triangles[indexBadTriangle], _triangles[i].FirstVertex, _triangles[i].SecondVertex))
                     {
                         midPoint.X = (_triangles[i].FirstVertex.X + _triangles[i].SecondVertex.X) / 2;
@@ -135,7 +147,7 @@ namespace MKE
 
                         goto step_two;
                     }
-                    else if (Mathematics.PointIsDiametralCircle(_triangles[indexBadTriangle], _triangles[i].SecondVertex, _triangles[i].ThirdVertex))
+                  if (Mathematics.PointIsDiametralCircle(_triangles[indexBadTriangle], _triangles[i].SecondVertex, _triangles[i].ThirdVertex))
                     {
                         midPoint.X = (_triangles[i].SecondVertex.X + _triangles[i].ThirdVertex.X) / 2;
                         midPoint.Y = (_triangles[i].SecondVertex.Y + _triangles[i].ThirdVertex.Y) / 2;
@@ -144,7 +156,7 @@ namespace MKE
 
                         goto step_two;
                     }
-                    else if (Mathematics.PointIsDiametralCircle(_triangles[indexBadTriangle], _triangles[i].ThirdVertex, _triangles[i].FirstVertex))
+                   if (Mathematics.PointIsDiametralCircle(_triangles[indexBadTriangle], _triangles[i].ThirdVertex, _triangles[i].FirstVertex))
                     {
                         midPoint.X = (_triangles[i].ThirdVertex.X + _triangles[i].FirstVertex.X) / 2;
                         midPoint.Y = (_triangles[i].ThirdVertex.Y + _triangles[i].FirstVertex.Y) / 2;
@@ -157,15 +169,30 @@ namespace MKE
 
                 if (!PointBeyondArea(Mathematics.GetCenterPointCircleTriangle(_triangles[indexBadTriangle])))
                 {
+                    if (_triangles.Count > 20000)
+                    {
+                        g.DisplayAllTriangles();
+                    }
                     AddPoint(Mathematics.GetCenterPointCircleTriangle(_triangles[indexBadTriangle]));
                 }
                 else
                 {
+                    //   g.DrawPoint(Color.Green, Mathematics.GetCenterPointCircleTriangle(_triangles[indexBadTriangle]));
+                    //AddPoint(Mathematics.PPP(_triangles[indexBadTriangle]));
+                    if (_triangles.Count > 20000)
+                    {
+                        g.DisplayAllTriangles();
+                    }
                     SplitHeightTriangle(_triangles[indexBadTriangle]);
                 }
-
+            //    g.Clear(XOY);
+              //  g.DisplayTriangle(_triangles[indexBadTriangle]);
+              //  g.DrawPoint(Color.Green, Mathematics.PPP(_triangles[indexBadTriangle]));
+                //AddPoint(Mathematics.PPP(_triangles[indexBadTriangle]));
+              
                 goto step_two;
             }
+            g.DisplayAllTriangles();
         }
         private List<PointD> MiddleSplitEdgesArea()
         {
@@ -251,18 +278,19 @@ namespace MKE
 
             if (_sizeGridChoice == 1)
             {
-                h = hInitial;
-                desiredSumSides = 3;
+                h = hInitial ;
+                desiredSumSides = hInitial * 3;
             }
             else if (_sizeGridChoice == 2)
             {
-                h = hInitial / 3;
-                desiredSumSides = 2;
+                h = hInitial / 4;
+                desiredSumSides = hInitial * 2;
             }
             else
             {
-                h = hInitial / 5;
-                desiredSumSides = 1;
+                h = hInitial / 7;
+                desiredSumSides = hInitial ;
+               // desiredSumSides =  2;
             }
 
             for (int i = 0; i < _triangles.Count; i++)
@@ -346,7 +374,8 @@ namespace MKE
         private void FlipBadEdges(Triangle triangle, PointD newPoint)
         {
             Triangle[] tempTriangle = new Triangle[2];
-
+           // tempTriangle[0] = new Triangle();
+          //  tempTriangle[1] = new Triangle();
             //ребро в новом треугольнике, которое не содержит NewPoint
             int commonEdgeIndex = NumberEdgeTriangle(triangle, newPoint);
 

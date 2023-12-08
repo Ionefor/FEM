@@ -42,12 +42,16 @@ namespace WinFormsApp1
         private int sizeGridChoice;
         private bool flagDef = false;
 
+        FEM fem;
+
         private Area area;
         private Triangulation triangulation;
         private NumberingNodes numberingNodes;
-        private SolutionEquation solution;
+       
         private GraphicsMke grapMke;
-
+      
+        private Dictionary<int, double> _tempBorder;
+        private List<BorderData> _borderData;
         private readonly TextBox NumVertex = new();
         private readonly TextBox X = new();
         private readonly TextBox Y = new();
@@ -74,7 +78,7 @@ namespace WinFormsApp1
         /// </summary>
         private void TestData()
         {
-           
+
             //
             KText.Visible = false;
             QDis.Visible = false;
@@ -82,159 +86,158 @@ namespace WinFormsApp1
             qDis.Visible = false;
             TDis.Visible = false;
 
-            NumVertex.Text = 13.ToString();
+            NumVertex.Text = 4.ToString();
             points = new PointD[int.Parse(NumVertex.Text.ToString())];
             h = new double[int.Parse(NumVertex.Text.ToString())];
             q = new double[int.Parse(NumVertex.Text.ToString())];
             t_inf = new double[int.Parse(NumVertex.Text.ToString())];
 
-            Kx = 3;
-            Ky = 3;
-            Q = 20;
+            Kx = 1;
+            Ky = 1;
+            Q = 0;
+            _tempBorder = new();
+
+            _tempBorder.Add(0, 313);
+
+         
 
             Kxx.Text = Kx.ToString();
             Kyy.Text = Ky.ToString();
             Qv.Text = Q.ToString();
 
-           /* points[0].X = 1;
-            points[0].Y = 1;
+            points[0].X = 0;
+            points[0].Y = 0;
 
-            points[1].X = 4;
+            points[1].X = 1;
             points[1].Y = 0;
 
-            points[2].X = 4;
-            points[2].Y = 4;
+            points[2].X = 1;
+            points[2].Y = 1;
 
             points[3].X = 0;
-            points[3].Y = 4;*
+            points[3].Y = 1;
+            /*
+                         points[0].X = 0;
+                         points[0].Y = 1;
 
-            /*    points[0].X = 1;
-                 points[0].Y = 0;
+                         points[1].X = 3;
+                         points[1].Y = 0;
 
-                 points[1].X = 5;
-                 points[1].Y = 2;
+                         points[2].X = 6;
+                         points[2].Y = 1;
 
-                 points[2].X = 5;
-                 points[2].Y = 3;
+                         points[3].X = 5;
+                         points[3].Y = 4;
 
-                 points[3].X = 4;
-                 points[3].Y = 3;
+                         points[4].X = 3;
+                         points[4].Y = 3;
 
-                 points[4].X = 3;
-                 points[4].Y = 4;
+                         points[5].X = 1;
+                         points[5].Y = 4;*/
+            _borderData = new();
+            _borderData.Add(new(0, 0, 0));
+            _borderData.Add(new(0, 0, 0));
+            _borderData.Add(new(150, 293, 0));
+            _borderData.Add(new(0, 0, 0));
 
-                 points[5].X = 2;
-                 points[5].Y = 2;
+           /* h[0] = 0;
+             t_inf[0] = 0;
+             q[0] = 0;
 
-                 points[6].X = 0;
-                 points[6].Y = 3;*/
+             h[1] = 0;
+             t_inf[1] = 0;
+             q[1] = 0;
 
-            h[0] = 150;
-            t_inf[0] = 320;
-            q[0] = 0;
+             h[2] = 150;
+             t_inf[2] = 293;
+             q[2] = 0;
 
-            h[1] = 150;
-            t_inf[1] = 350;
-            q[1] = 0;
+             h[3] = 0;
+            t_inf[3] = 0;
+             q[3] = 0;*/
 
-            h[2] = 150;
-            t_inf[2] = 330;
-            q[2] = 0;
+           /*  h[4] = 150;
+              t_inf[4] = 300;
+              q[4] = 150;
 
-            h[3] = 150;
-            t_inf[3] = 300;
-            q[3] = 0;
+              h[5] = 150;
+              t_inf[5] = 300;
+              q[5] = 150;
 
-             h[4] = 150;
-             t_inf[4] = 300;
-             q[4] = 0;
+              h[6] = 150;
+              t_inf[6] = 300;
+              q[6] = 150;
 
-             h[5] = 150;
-             t_inf[5] = 300;
-             q[5] = 0;
+              h[7] = 150;
+              t_inf[7] = 300;
+              q[7] = 150;
 
-             h[6] = 150;
-             t_inf[6] = 300;
-             q[6] = 0;
+              h[8] = 150;
+              t_inf[8] = 301;
+              q[8] = 150;
 
-             h[7] = 150;
-             t_inf[7] = 300;
-             q[7] = 0;
+              h[9] = 150;
+              t_inf[9] = 300;
+              q[9] = 150;
 
-             h[8] = 150;
-             t_inf[8] = 301;
-             q[8] = 0;
+              h[10] = 150;
+              t_inf[10] = 300;
+              q[10] = 150;
 
-             h[9] = 150;
-             t_inf[9] = 300;
-             q[9] = 0;
+              h[11] = 150;
+              t_inf[11] = 300;
+              q[11] = 150;
 
-             h[10] = 150;
-             t_inf[10] = 300;
-             q[10] = 0;
+              h[12] = 150;
+              t_inf[12] = 300;
+              q[12] = 150;*/
+              //
+              /*points[0].X = 1;
+              points[0].Y = 6;
 
-             h[11] = 150;
-             t_inf[11] = 300;
-             q[11] = 0;
+              points[1].X = 2.5f;
+              points[1].Y = 2;
 
-             h[12] = 150;
-             t_inf[12] = 300;
-             q[12] = 0;
-             //
-             points[0].X = 1;
-             points[0].Y = 6;
+              points[2].X = 4;
+              points[2].Y = 3.5f;
 
-             points[1].X = 2.5f;
-             points[1].Y = 2;
+              points[3].X = 6.5f;
+              points[3].Y = 3.5f;
 
-             points[2].X = 4;
-             points[2].Y = 3.5f;
+              points[4].X = 7.5f;
+              points[4].Y = 0.5f;
 
-             points[3].X = 6.5f;
-             points[3].Y = 3.5f;
+              points[5].X = 9.5f;
+              points[5].Y = 2;
 
-             points[4].X = 7.5f;
-             points[4].Y = 0.5f;
+              points[6].X = 9;
+              points[6].Y = 4.5f;
 
-             points[5].X = 9.5f;
-             points[5].Y = 2;
+              points[7].X = 13;
+              points[7].Y = 4;
 
-             points[6].X = 9;
-             points[6].Y = 4.5f;
+              points[8].X = 12.5f;
+              points[8].Y = 7.5f;
 
-             points[7].X = 13;
-             points[7].Y = 4;
+              points[9].X = 9.5f;
+              points[9].Y = 7.5f;
 
-             points[8].X = 12.5f;
-             points[8].Y = 7.5f;
+              points[10].X = 6;
+              points[10].Y = 7;
 
-             points[9].X = 9.5f;
-             points[9].Y = 7.5f;
+              points[11].X = 5;
+              points[11].Y = 8.5f;
 
-             points[10].X = 6;
-             points[10].Y = 7;
-
-             points[11].X = 5;
-             points[11].Y = 8.5f;
-
-             points[12].X = 4;
-             points[12].Y = 6;
+              points[12].X = 4;
+              points[12].Y = 6;*/
 
             sizeGridChoice = 1;
             maxSizeGrid.Checked = true;
 
-            area = new Area(points);
-            area.ShiftingPointsArea();
+ 
 
-            triangulation = new Triangulation(area.Points, sizeGridChoice);
-            triangulation.InitialPartitioningArea();
-            triangulation.DelaunayTriangulation();
-
-            numberingNodes = new NumberingNodes(triangulation.Triangles);
-            numberingNodes.DeterminingNodeNumbers();
-
-            grapMke = new GraphicsMke(XOY, triangulation.Triangles);
-            grapMke.DisplayAllTriangles();
+            fem = new(points, _borderData, _tempBorder, XOY, Kx, Ky, Q, sizeGridChoice);
+            fem.BuildingGrid();
 
             sizeText.Text = "Size:";
             sizeText.Visible = true;
@@ -847,7 +850,7 @@ namespace WinFormsApp1
                 area = new Area(points);
                 area.ShiftingPointsArea();
 
-                triangulation = new Triangulation(area.Points, sizeGridChoice);
+                triangulation = new Triangulation(area.Points, sizeGridChoice, XOY);
                 triangulation.InitialPartitioningArea();
                 triangulation.DelaunayTriangulation();
 
@@ -966,7 +969,7 @@ namespace WinFormsApp1
                             sizeGridChoice = 3;
                         }
 
-                        triangulation = new Triangulation(area.Points, sizeGridChoice);
+                        triangulation = new Triangulation(area.Points, sizeGridChoice, XOY);
                         triangulation.InitialPartitioningArea();
                         triangulation.DelaunayTriangulation();
 
@@ -1022,10 +1025,11 @@ namespace WinFormsApp1
         /// <param name="e"></param>
         private void GetSolution_Click(object sender, EventArgs e)
         {
-            solution = new SolutionEquation(Kx, Ky, Q, h, q, t_inf, numberingNodes.GridNodes.Count, triangulation.Triangles, area.Points);
-            solution.FindGlobalMatrix();
-            solution.FindColumnTemperature();
+            // solution = new SolutionEquation(Kx, Ky, Q, h, q, t_inf, numberingNodes.GridNodes.Count, triangulation.Triangles, area.Points, foundNodes.BorderNodes, tempBorder);
+            //  solution.FindGlobalMatrix();
+            //  solution.FindColumnTemperature();
 
+            fem.СalculatingResult();
             TempNodeBut.Enabled = true;
             EnableNodes.Enabled = true;
             Change.Enabled = false;
@@ -1191,13 +1195,40 @@ namespace WinFormsApp1
 
                 stream.WriteLine("Номер узла      Температура в узле (°C)");
 
-                for (int i = 0; i < numberingNodes.GridNodes.Count; i++)
+                for (int i = 0; i < fem.GridNodes.Count; i++)
                 {
                     stream.WriteLine("_____________|_________________________|");
-                    stream.WriteLine((i + 1).ToString() + "                       " + Math.Round((solution.Result[i] - 273), 2));
+                    stream.WriteLine((i + 1).ToString() + "                       " + Math.Round((fem.Result[i] - 273), 2));
                 }
                 stream.Write("_____________|_________________________|");
             }
+           /* SaveFileDialog result = new()
+            {
+                Filter = "Текстовые файлы(*.txt) | *.txt | All files(*.*) | *.* "
+            };
+
+              if (result.ShowDialog() == DialogResult.OK)
+                {
+                string path = result.FileName;
+                using StreamWriter stream = new(path, false);
+
+
+                /*&  for(int i = 0; i < numberingNodes.GridNodes.Count; i++)
+                  {
+                      for (int j = 0; j < numberingNodes.GridNodes.Count; j++)
+                      {
+                          stream.Write(Math.Round((solution._K[i, j]), 4) + "   ");
+                      }
+                      stream.WriteLine("\n_______________________________________________________________");
+                  }*/
+                
+                  /*  for (int j = 0; j < numberingNodes.GridNodes.Count; j++)
+                    {
+                        stream.WriteLine(Math.Round((solution._F[j]), 4) + "   ");
+                    }
+                  
+               
+            }*/
         }
         /// <summary>
         /// Показывает температуру в указанном узле
@@ -1222,7 +1253,7 @@ namespace WinFormsApp1
                         }
                         else
                         {
-                            TempNode.Text = Math.Round((solution.Result[int.Parse(NumNodes.Text) - 1] - 273), 2).ToString();
+                            TempNode.Text = Math.Round((fem.Result[int.Parse(NumNodes.Text) - 1] - 273), 2).ToString();
                         }
                     }
                     else

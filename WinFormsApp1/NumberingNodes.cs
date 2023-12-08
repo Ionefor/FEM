@@ -8,12 +8,8 @@ namespace MKE
 {
     public class NumberingNodes
     {
-        private List<Triangle> _triangles;
-        /// <summary>
-        /// Узлы сетки
-        /// </summary>
-        /// 
-        private List<GridNode> _gridNodes;
+        private readonly List<Triangle> _triangles;
+        private readonly List<GridNode> _gridNodes;
         public List<GridNode> GridNodes { get => _gridNodes; }
         public NumberingNodes(List<Triangle> triangles)
         {
@@ -49,7 +45,7 @@ namespace MKE
             }
 
             EqualityVertexAndNodes();
-        }
+        } 
         private static bool ExistNode(PointD point, ref List<PointD> points)
         {
             for (int i = 0; i < points.Count; i++)

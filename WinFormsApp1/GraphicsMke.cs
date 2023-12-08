@@ -8,16 +8,16 @@
         /// <summary>
         ///Ширина панели
         /// </summary>
-        public int PanelWidth { get; private set; }
+        public int PanelWidth { get;}
         /// <summary>
         ///Длина панели
         /// </summary>
-        public int PanelHeight { get; private set; }
-        private Panel XOY { get; set; }
+        public int PanelHeight { get;}
+        private Panel XOY;
         /// <summary>
         ///Набор треугольников, образующих триангуляцию области 
         /// </summary>
-        private List<Triangle> Triangles { get; set; }
+        private List<Triangle> Triangles;
         private readonly Graphics graphics;            
         public GraphicsMke(Panel XOY, List<Triangle> triangulation)
         {

@@ -200,11 +200,23 @@ namespace MKE
                 Y = (startPoint.Y + endPoint.Y) / 2
             };
 
-            if (GetDistancePoints(GetCenterPointCircleTriangle(triangle), midPoint) <= (GetDistancePoints(midPoint, startPoint) / 2))
+            if (GetDistancePoints(GetCenterPointCircleTriangle(triangle), midPoint) <= (GetDistancePoints(midPoint, startPoint)))
             {
                 return true;
             }
             return false;
+        }
+        public static PointD PPPfdsfs(Triangle triangle)//??????????????????
+        {
+            PointD pointD = new();
+
+            pointD.X = (triangle.FirstVertex.X * GetSideLenght(2, triangle) + triangle.SecondVertex.X * GetSideLenght(3, triangle)
+                + triangle.ThirdVertex.X * GetSideLenght(1, triangle)) / GetSumtSidesTriangle(triangle);
+
+            pointD.Y = (triangle.FirstVertex.Y * GetSideLenght(2, triangle) + triangle.SecondVertex.Y * GetSideLenght(3, triangle)
+                 + triangle.ThirdVertex.Y * GetSideLenght(1, triangle)) / GetSumtSidesTriangle(triangle);
+
+            return pointD;
         }
         public static double GetSideLenght(int num, Triangle triangle)
         {

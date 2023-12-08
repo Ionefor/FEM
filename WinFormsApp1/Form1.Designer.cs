@@ -65,7 +65,7 @@
             // 
             // XOY
             // 
-            XOY.BackColor = Color.Linen;
+            XOY.BackColor = Color.FromArgb(242, 242, 242);
             XOY.Dock = DockStyle.Fill;
             XOY.Location = new Point(0, 0);
             XOY.Name = "XOY";
